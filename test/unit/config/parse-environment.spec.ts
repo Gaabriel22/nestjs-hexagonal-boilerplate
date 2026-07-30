@@ -21,6 +21,7 @@ describe('parseEnvironment', () => {
       AUTH_ACCESS_TOKEN_TTL_SECONDS: '600',
       AUTH_REFRESH_TOKEN_TTL_SECONDS: '1200',
       CORS_ORIGINS: 'https://app.example.com,https://admin.example.com',
+      HTTP_BODY_LIMIT_BYTES: '2048',
       RATE_LIMIT_MAX: '50',
       RATE_LIMIT_WINDOW_SECONDS: '30',
       LOG_LEVEL: 'warn',
@@ -46,6 +47,9 @@ describe('parseEnvironment', () => {
       },
       cors: {
         origins: ['https://app.example.com', 'https://admin.example.com'],
+      },
+      http: {
+        bodyLimitBytes: 2048,
       },
       rateLimit: {
         max: 50,
@@ -76,6 +80,7 @@ describe('parseEnvironment', () => {
     expect(config.authentication.accessTokenTtlSeconds).toBe(900)
     expect(config.authentication.refreshTokenTtlSeconds).toBe(2_592_000)
     expect(config.cors.origins).toEqual(['http://localhost:3000'])
+    expect(config.http.bodyLimitBytes).toBe(1_048_576)
     expect(config.rateLimit).toEqual({ max: 100, windowSeconds: 60 })
     expect(config.logging.level).toBe('info')
     expect(config.documentation).toEqual({

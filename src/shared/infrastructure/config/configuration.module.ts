@@ -1,16 +1,17 @@
 import { Global, Module } from '@nestjs/common'
 import { ConfigModule as NestConfigModule } from '@nestjs/config'
 
-import { parseEnvironment } from './parse-environment'
+import { applicationConfig } from './application-config'
+import type { ApplicationConfig } from './environment.schema'
 
 @Global()
 @Module({
   imports: [
     NestConfigModule.forRoot({
       cache: true,
-      expandVariables: false,
+      ignoreEnvFile: true,
       isGlobal: true,
-      validate: parseEnvironment,
+      load: [(): ApplicationConfig => applicationConfig],
     }),
   ],
   exports: [NestConfigModule],

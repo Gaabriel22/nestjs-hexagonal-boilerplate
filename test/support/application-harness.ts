@@ -1,3 +1,4 @@
+import type { Type } from '@nestjs/common'
 import type { NestFastifyApplication } from '@nestjs/platform-fastify'
 
 import { createApplication } from '../../src/bootstrap'
@@ -7,8 +8,8 @@ export interface ApplicationHarness {
   close(): Promise<void>
 }
 
-export async function createApplicationHarness(): Promise<ApplicationHarness> {
-  const application = await createApplication()
+export async function createApplicationHarness(rootModule?: Type): Promise<ApplicationHarness> {
+  const application = await createApplication(rootModule)
   application.useLogger(false)
   await application.init()
 

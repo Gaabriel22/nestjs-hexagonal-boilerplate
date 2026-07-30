@@ -3,6 +3,8 @@ const TEST_ENVIRONMENT = Object.freeze({
   DATABASE_URL: 'postgresql://app:app@localhost:5432/app_test',
   AUTH_ACCESS_TOKEN_SECRET: 'test-access-token-secret-at-least-32-characters',
   AUTH_REFRESH_TOKEN_HASH_SECRET: 'test-refresh-token-secret-at-least-32-characters',
+  HTTP_BODY_LIMIT_BYTES: '1024',
+  RATE_LIMIT_MAX: '2',
 })
 
 export function installTestEnvironment(): () => void {

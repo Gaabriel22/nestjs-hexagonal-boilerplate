@@ -37,6 +37,7 @@ const rawEnvironmentSchema = z
     AUTH_REFRESH_TOKEN_HASH_SECRET: secretSchema,
     AUTH_REFRESH_TOKEN_TTL_SECONDS: positiveIntegerSchema.default(2_592_000),
     CORS_ORIGINS: corsOriginsSchema,
+    HTTP_BODY_LIMIT_BYTES: positiveIntegerSchema.default(1_048_576),
     RATE_LIMIT_MAX: positiveIntegerSchema.default(100),
     RATE_LIMIT_WINDOW_SECONDS: positiveIntegerSchema.default(60),
     LOG_LEVEL: z.enum(['fatal', 'error', 'warn', 'info', 'debug', 'trace']).default('info'),
@@ -64,6 +65,9 @@ export const environmentSchema = rawEnvironmentSchema.transform((environment) =>
     }),
     cors: Object.freeze({
       origins: Object.freeze(environment.CORS_ORIGINS),
+    }),
+    http: Object.freeze({
+      bodyLimitBytes: environment.HTTP_BODY_LIMIT_BYTES,
     }),
     rateLimit: Object.freeze({
       max: environment.RATE_LIMIT_MAX,

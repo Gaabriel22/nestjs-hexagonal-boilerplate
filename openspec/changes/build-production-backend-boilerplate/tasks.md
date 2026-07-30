@@ -34,16 +34,16 @@
 - [x] 4.4 Add unit tests for valid parsing, defaults, missing values, malformed values, and secret redaction
 - [x] 4.5 Add `.env.example` with non-secret development placeholders and document required values
 - [x] 4.6 Run `npm run format:check`, `npm run lint`, `npm run typecheck`, unit tests, and `npm run build`
-- [ ] 4.7 Commit the verified slice with message `feat: add typed runtime configuration`
+- [x] 4.7 Commit the verified slice with message `feat: add typed runtime configuration`
 
 ## 5. HTTP Platform Conventions
 
-- [ ] 5.1 Add the versioned API prefix and global DTO validation with unknown-property rejection
-- [ ] 5.2 Define transport-agnostic domain/application error bases and stable public error codes
-- [ ] 5.3 Implement the global Problem Details exception filter for validation, known, and unexpected errors
-- [ ] 5.4 Configure Fastify-compatible CORS, security headers, request size, and rate-limit policies
-- [ ] 5.5 Add end-to-end tests for version routing, valid input, invalid input, known errors, unexpected errors, and request limits
-- [ ] 5.6 Run `npm run format:check`, `npm run lint`, `npm run typecheck`, unit tests, end-to-end tests, and `npm run build`
+- [x] 5.1 Add the versioned API prefix and global DTO validation with unknown-property rejection
+- [x] 5.2 Define transport-agnostic domain/application error bases and stable public error codes
+- [x] 5.3 Implement the global Problem Details exception filter for validation, known, and unexpected errors
+- [x] 5.4 Configure Fastify-compatible CORS, security headers, request size, and rate-limit policies
+- [x] 5.5 Add end-to-end tests for version routing, valid input, invalid input, known errors, unexpected errors, and request limits
+- [x] 5.6 Run `npm run format:check`, `npm run lint`, `npm run typecheck`, unit tests, end-to-end tests, and `npm run build`
 - [ ] 5.7 Commit the verified slice with message `feat: standardize HTTP platform behavior`
 
 ## 6. PostgreSQL and Prisma Foundation

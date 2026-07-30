@@ -24,10 +24,16 @@
     "test:watch": "jest --config jest.unit.config.cjs --watch"
   },
   "dependencies": {
+    "@fastify/cors": "^11.3.0",
+    "@fastify/helmet": "^13.1.0",
+    "@fastify/rate-limit": "^11.2.0",
     "@nestjs/common": "^11.1.28",
     "@nestjs/config": "^4.0.4",
     "@nestjs/core": "^11.1.28",
     "@nestjs/platform-fastify": "^11.1.28",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.15.1",
+    "dotenv": "^17.4.2",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.2",
     "zod": "^4.4.3"

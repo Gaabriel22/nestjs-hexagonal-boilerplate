@@ -4,5 +4,6 @@ const base = require('./jest.base.config.cjs')
 module.exports = {
   ...base,
   displayName: 'integration',
+  setupFiles: ['<rootDir>/test/support/setup-environment.ts'],
   testMatch: ['<rootDir>/test/integration/**/*.integration-spec.ts'],
 }

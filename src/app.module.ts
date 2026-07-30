@@ -1,4 +1,8 @@
 import { Module } from '@nestjs/common'
 
-@Module({})
+import { ConfigurationModule } from './shared/infrastructure/config/configuration.module'
+
+@Module({
+  imports: [ConfigurationModule],
+})
 export class AppModule {}

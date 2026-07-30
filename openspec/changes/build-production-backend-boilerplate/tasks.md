@@ -24,16 +24,16 @@
 - [x] 3.4 Add architecture tests that reject NestJS, Fastify, Prisma, and HTTP imports from domain code
 - [x] 3.5 Add architecture tests that reject HTTP and concrete persistence imports from application code
 - [x] 3.6 Run `npm run format:check`, `npm run lint`, `npm run typecheck`, and the unit and architecture test commands
-- [ ] 3.7 Commit the verified slice with message `test: establish layered test harness`
+- [x] 3.7 Commit the verified slice with message `test: establish layered test harness`
 
 ## 4. Typed Configuration
 
-- [ ] 4.1 Define the environment schema for application, database, authentication, CORS, rate-limit, logging, and documentation values
-- [ ] 4.2 Implement immutable typed configuration providers and eliminate direct environment reads outside configuration/bootstrap code
-- [ ] 4.3 Add safe startup diagnostics that identify invalid configuration without printing secret values
-- [ ] 4.4 Add unit tests for valid parsing, defaults, missing values, malformed values, and secret redaction
-- [ ] 4.5 Add `.env.example` with non-secret development placeholders and document required values
-- [ ] 4.6 Run `npm run format:check`, `npm run lint`, `npm run typecheck`, unit tests, and `npm run build`
+- [x] 4.1 Define the environment schema for application, database, authentication, CORS, rate-limit, logging, and documentation values
+- [x] 4.2 Implement immutable typed configuration providers and eliminate direct environment reads outside configuration/bootstrap code
+- [x] 4.3 Add safe startup diagnostics that identify invalid configuration without printing secret values
+- [x] 4.4 Add unit tests for valid parsing, defaults, missing values, malformed values, and secret redaction
+- [x] 4.5 Add `.env.example` with non-secret development placeholders and document required values
+- [x] 4.6 Run `npm run format:check`, `npm run lint`, `npm run typecheck`, unit tests, and `npm run build`
 - [ ] 4.7 Commit the verified slice with message `feat: add typed runtime configuration`
 
 ## 5. HTTP Platform Conventions

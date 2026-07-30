@@ -1,0 +1,223 @@
+## 1. Bootstrap TypeScript and NestJS
+
+- [x] 1.1 Scaffold the npm, TypeScript, NestJS, and Fastify application files without generating feature CRUD code
+- [x] 1.2 Add canonical development, build, start, lint, typecheck, and test scripts
+- [x] 1.3 Add a minimal Fastify bootstrap and root module with graceful shutdown enabled
+- [x] 1.4 Add a bootstrap smoke test that starts and closes the application
+- [x] 1.5 Run `npm run lint`, `npm run typecheck`, `npm run test`, and `npm run build`
+- [ ] 1.6 Commit the verified slice with message `chore: bootstrap NestJS Fastify application`
+
+## 2. Prettier Formatting
+
+- [ ] 2.1 Install Prettier as a development dependency and commit the canonical project configuration
+- [ ] 2.2 Add `.prettierignore` entries for dependencies, generated Prisma code, build output, coverage, and local artifacts
+- [ ] 2.3 Add `format` and non-mutating `format:check` npm scripts and remove overlapping ESLint formatting rules
+- [ ] 2.4 Format existing supported files and document editor-independent usage
+- [ ] 2.5 Run `npm run format:check`, `npm run lint`, `npm run typecheck`, and `npm run test`
+- [ ] 2.6 Commit the verified slice with message `chore: enforce Prettier formatting`
+
+## 3. Test Harness and Architecture Guardrails
+
+- [ ] 3.1 Configure separate unit, integration, architecture, and end-to-end test projects or commands
+- [ ] 3.2 Add deterministic shared test builders and lifecycle cleanup helpers
+- [ ] 3.3 Create feature-first folders for shared, identity, users, organizations, and audit modules
+- [ ] 3.4 Add architecture tests that reject NestJS, Fastify, Prisma, and HTTP imports from domain code
+- [ ] 3.5 Add architecture tests that reject HTTP and concrete persistence imports from application code
+- [ ] 3.6 Run `npm run format:check`, `npm run lint`, `npm run typecheck`, and the unit and architecture test commands
+- [ ] 3.7 Commit the verified slice with message `test: establish layered test harness`
+
+## 4. Typed Configuration
+
+- [ ] 4.1 Define the environment schema for application, database, authentication, CORS, rate-limit, logging, and documentation values
+- [ ] 4.2 Implement immutable typed configuration providers and eliminate direct environment reads outside configuration/bootstrap code
+- [ ] 4.3 Add safe startup diagnostics that identify invalid configuration without printing secret values
+- [ ] 4.4 Add unit tests for valid parsing, defaults, missing values, malformed values, and secret redaction
+- [ ] 4.5 Add `.env.example` with non-secret development placeholders and document required values
+- [ ] 4.6 Run `npm run format:check`, `npm run lint`, `npm run typecheck`, unit tests, and `npm run build`
+- [ ] 4.7 Commit the verified slice with message `feat: add typed runtime configuration`
+
+## 5. HTTP Platform Conventions
+
+- [ ] 5.1 Add the versioned API prefix and global DTO validation with unknown-property rejection
+- [ ] 5.2 Define transport-agnostic domain/application error bases and stable public error codes
+- [ ] 5.3 Implement the global Problem Details exception filter for validation, known, and unexpected errors
+- [ ] 5.4 Configure Fastify-compatible CORS, security headers, request size, and rate-limit policies
+- [ ] 5.5 Add end-to-end tests for version routing, valid input, invalid input, known errors, unexpected errors, and request limits
+- [ ] 5.6 Run `npm run format:check`, `npm run lint`, `npm run typecheck`, unit tests, end-to-end tests, and `npm run build`
+- [ ] 5.7 Commit the verified slice with message `feat: standardize HTTP platform behavior`
+
+## 6. PostgreSQL and Prisma Foundation
+
+- [ ] 6.1 Add Prisma ORM, the PostgreSQL driver adapter, generator configuration, and database lifecycle provider
+- [ ] 6.2 Add npm scripts for Prisma generation, migration development, migration deployment, and test database preparation
+- [ ] 6.3 Configure a dedicated PostgreSQL integration-test database guard that rejects unsafe database targets
+- [ ] 6.4 Add a first connectivity integration test and guarantee client shutdown after suites
+- [ ] 6.5 Add a migration smoke test that applies all migrations to an empty test database
+- [ ] 6.6 Run `npm run format:check`, `npm run lint`, `npm run typecheck`, integration tests, and `npm run build`
+- [ ] 6.7 Commit the verified slice with message `feat: add Prisma PostgreSQL infrastructure`
+
+## 7. Identity Persistence Model
+
+- [ ] 7.1 Model users, credentials, and sessions with UUID identifiers, timezone-aware timestamps, constraints, and relations
+- [ ] 7.2 Add normalized unique email storage and indexes for session ownership, activity, expiry, and token lookup
+- [ ] 7.3 Generate and review the identity migration SQL for constraints, foreign keys, and indexes
+- [ ] 7.4 Implement infrastructure mappers and repository adapters behind identity ports
+- [ ] 7.5 Add integration tests for user uniqueness, session lookup, ownership isolation, expiry fields, and repository mappings
+- [ ] 7.6 Run `npm run format:check`, `npm run lint`, `npm run typecheck`, architecture tests, integration tests, and `npm run build`
+- [ ] 7.7 Commit the verified slice with message `feat: add identity persistence model`
+
+## 8. Registration
+
+- [ ] 8.1 Implement normalized email and credential domain behavior plus password policy errors
+- [ ] 8.2 Add the Argon2id password hasher adapter behind an application port
+- [ ] 8.3 Implement registration as one transaction that creates user and credential records
+- [ ] 8.4 Add registration DTOs, controller route, safe response model, and Problem Details mappings
+- [ ] 8.5 Add unit tests for normalization, password hashing orchestration, duplicate email, and rollback behavior
+- [ ] 8.6 Add end-to-end tests for successful registration, invalid input, duplicate normalized email, and response secrecy
+- [ ] 8.7 Run `npm run format:check`, `npm run lint`, `npm run typecheck`, affected unit/integration/end-to-end tests, and `npm run build`
+- [ ] 8.8 Commit the verified slice with message `feat: add user registration`
+
+## 9. Login and Access Authentication
+
+- [ ] 9.1 Implement constant-public-response credential authentication for unknown users and invalid passwords
+- [ ] 9.2 Add signed short-lived access token creation and verification behind application ports
+- [ ] 9.3 Create sessions during successful login while persisting only the keyed refresh-token hash
+- [ ] 9.4 Add login DTOs, controller route, authentication guard, and current request identity context
+- [ ] 9.5 Enforce current user and session activity on protected requests
+- [ ] 9.6 Add unit tests for credential outcomes, access claims, inactive users, and revoked sessions
+- [ ] 9.7 Add end-to-end tests for login success, uniform invalid credentials, missing token, expired token, and invalid token
+- [ ] 9.8 Run `npm run format:check`, `npm run lint`, `npm run typecheck`, affected tests, and `npm run build`
+- [ ] 9.9 Commit the verified slice with message `feat: add login and access authentication`
+
+## 10. Refresh Rotation and Session Revocation
+
+- [ ] 10.1 Implement atomic opaque refresh-token rotation with conditional session update
+- [ ] 10.2 Add reuse detection that revokes the affected session or token family
+- [ ] 10.3 Implement current-session logout, owned-session listing, and owned-session revocation use cases
+- [ ] 10.4 Add refresh, logout, session list, and session revoke HTTP routes with safe session DTOs
+- [ ] 10.5 Add concurrency-focused integration tests for one-time rotation and reuse handling
+- [ ] 10.6 Add end-to-end tests for refresh success, reuse rejection, logout, owned revocation, and foreign-session concealment
+- [ ] 10.7 Run `npm run format:check`, `npm run lint`, `npm run typecheck`, affected tests, and `npm run build`
+- [ ] 10.8 Commit the verified slice with message `feat: add renewable session management`
+
+## 11. Current User Profile
+
+- [ ] 11.1 Implement current-user profile query and safe application result
+- [ ] 11.2 Implement supported profile updates with immutable and unknown field rejection
+- [ ] 11.3 Add current-user GET and PATCH routes with documented DTOs
+- [ ] 11.4 Add unit and integration tests for reads, valid updates, invalid updates, and persistence mapping
+- [ ] 11.5 Add end-to-end tests for profile secrecy, updates, unauthenticated access, and deactivated-user rejection
+- [ ] 11.6 Run `npm run format:check`, `npm run lint`, `npm run typecheck`, affected tests, and `npm run build`
+- [ ] 11.7 Commit the verified slice with message `feat: add current user profile`
+
+## 12. Organization Persistence and Creation
+
+- [ ] 12.1 Model organizations and memberships with role, active state, timestamps, constraints, and tenant lookup indexes
+- [ ] 12.2 Generate and review the organization migration SQL and foreign-key behavior
+- [ ] 12.3 Define organization and membership domain behavior, repositories, mappers, and application ports
+- [ ] 12.4 Implement atomic organization creation with creator owner membership
+- [ ] 12.5 Add the organization creation route and safe response DTO
+- [ ] 12.6 Add unit, integration, and end-to-end tests for successful creation, rollback, and owner assignment
+- [ ] 12.7 Run `npm run format:check`, `npm run lint`, `npm run typecheck`, architecture tests, affected tests, and `npm run build`
+- [ ] 12.8 Commit the verified slice with message `feat: add organization creation`
+
+## 13. Organization Permissions and Tenant Isolation
+
+- [ ] 13.1 Define owner, admin, and member permission mappings as explicit application policy
+- [ ] 13.2 Implement organization membership and permission guards using current persisted membership state
+- [ ] 13.3 Require organization identifiers in organization-scoped repository contracts and queries
+- [ ] 13.4 Implement cursor-paginated membership listing
+- [ ] 13.5 Add unit tests covering every role-to-permission mapping and inactive membership
+- [ ] 13.6 Add integration and end-to-end tests proving unrelated and cross-tenant identifiers cannot expose data
+- [ ] 13.7 Run `npm run format:check`, `npm run lint`, `npm run typecheck`, architecture tests, affected tests, and `npm run build`
+- [ ] 13.8 Commit the verified slice with message `feat: enforce organization access control`
+
+## 14. Membership Administration
+
+- [ ] 14.1 Implement supported non-owner membership role changes with permission enforcement
+- [ ] 14.2 Implement membership removal and immediate access loss
+- [ ] 14.3 Enforce the invariant that every organization retains an active owner
+- [ ] 14.4 Add role-change and membership-removal HTTP routes with stable errors
+- [ ] 14.5 Add unit and integration tests for valid changes, forbidden changes, stale roles, and last-owner protection
+- [ ] 14.6 Add end-to-end tests for administration success, HTTP 403 failures, and immediate authorization changes
+- [ ] 14.7 Run `npm run format:check`, `npm run lint`, `npm run typecheck`, affected tests, and `npm run build`
+- [ ] 14.8 Commit the verified slice with message `feat: add membership administration`
+
+## 15. Audit Persistence and Recording
+
+- [ ] 15.1 Model immutable audit events with actor, organization, action, target, request identifier, safe metadata, and query indexes
+- [ ] 15.2 Generate and review the audit migration SQL
+- [ ] 15.3 Implement the audit append port and Prisma adapter with an explicit metadata allowlist
+- [ ] 15.4 Integrate audit appends into registration/session security and organization administration transactions where specified
+- [ ] 15.5 Add integration tests for atomic success/rollback, immutability, tenant ownership, and sensitive-data exclusion
+- [ ] 15.6 Run `npm run format:check`, `npm run lint`, `npm run typecheck`, affected unit/integration tests, and `npm run build`
+- [ ] 15.7 Commit the verified slice with message `feat: record immutable audit events`
+
+## 16. Audit Retrieval
+
+- [ ] 16.1 Implement tenant-scoped cursor pagination and supported audit filters with deterministic ordering
+- [ ] 16.2 Enforce audit-read permission through application policy and HTTP guards
+- [ ] 16.3 Add the organization audit route and safe event response DTO
+- [ ] 16.4 Add unit and integration tests for pagination, filters, permission denial, and tenant isolation
+- [ ] 16.5 Add end-to-end tests for authorized retrieval and unauthorized concealment
+- [ ] 16.6 Run `npm run format:check`, `npm run lint`, `npm run typecheck`, affected tests, and `npm run build`
+- [ ] 16.7 Commit the verified slice with message `feat: add tenant audit queries`
+
+## 17. OpenAPI and Scalar Reference
+
+- [ ] 17.1 Configure OpenAPI metadata, bearer authentication scheme, version information, tags, and raw document route
+- [ ] 17.2 Annotate public operations and DTOs with request, success, and standard Problem Details responses
+- [ ] 17.3 Mount Scalar API Reference with Fastify support against the generated OpenAPI route
+- [ ] 17.4 Add an OpenAPI generation test that validates required operations, schemas, and security declarations
+- [ ] 17.5 Add an end-to-end smoke test for the raw document and Scalar reference routes
+- [ ] 17.6 Run `npm run format:check`, `npm run lint`, `npm run typecheck`, OpenAPI tests, end-to-end tests, and `npm run build`
+- [ ] 17.7 Commit the verified slice with message `docs: add OpenAPI and Scalar reference`
+
+## 18. Structured Logging and Correlation
+
+- [ ] 18.1 Add JSON logger configuration with service, environment, severity, timestamp, and error serialization
+- [ ] 18.2 Configure redaction for authorization, cookies, credentials, tokens, and secret fields
+- [ ] 18.3 Implement validated inbound or generated request identifiers and return them in response headers
+- [ ] 18.4 Add one request completion log with method, route template, status, duration, and request identifier
+- [ ] 18.5 Propagate request identifiers to audited application actions without coupling domain code to HTTP
+- [ ] 18.6 Add unit and end-to-end tests for correlation, bounded request logs, redaction, and error serialization
+- [ ] 18.7 Run `npm run format:check`, `npm run lint`, `npm run typecheck`, affected tests, and `npm run build`
+- [ ] 18.8 Commit the verified slice with message `feat: add structured correlated logging`
+
+## 19. Health and Metrics
+
+- [ ] 19.1 Add a lightweight liveness endpoint independent of optional external dependencies
+- [ ] 19.2 Add a bounded-time readiness endpoint that verifies PostgreSQL and returns HTTP 503 when unavailable
+- [ ] 19.3 Add Prometheus-compatible process, request count, and request duration metrics
+- [ ] 19.4 Ensure metrics use route templates and exclude user, tenant, token, and request identifiers from labels
+- [ ] 19.5 Add unit and end-to-end tests for live, ready, not-ready, metric format, and label cardinality safeguards
+- [ ] 19.6 Run `npm run format:check`, `npm run lint`, `npm run typecheck`, affected tests, and `npm run build`
+- [ ] 19.7 Commit the verified slice with message `feat: add health checks and metrics`
+
+## 20. Development Containers
+
+- [ ] 20.1 Add a pinned multi-stage Dockerfile with dependency, development, build, and production targets
+- [ ] 20.2 Add `.dockerignore` rules for local dependencies, environment files, logs, coverage, builds, generated clutter, and version-control internals
+- [ ] 20.3 Add Docker Compose API and PostgreSQL services with health-aware startup, named development storage, and localhost development ports
+- [ ] 20.4 Add container-specific environment examples and document ordinary versus destructive shutdown commands
+- [ ] 20.5 Build the development target and verify hot-start, PostgreSQL connectivity, liveness, and readiness
+- [ ] 20.6 Run `npm run format:check`, relevant host checks, and `docker compose config`
+- [ ] 20.7 Commit the verified slice with message `chore: add containerized development environment`
+
+## 21. Production Container Hardening
+
+- [ ] 21.1 Run the production image as a dedicated non-root user with only runtime-required files
+- [ ] 21.2 Add container health check, termination behavior, and runtime-only secret configuration
+- [ ] 21.3 Build the production target from a clean context and inspect image user and copied artifacts
+- [ ] 21.4 Start the production target against PostgreSQL and run API, authentication, readiness, and graceful-shutdown smoke tests
+- [ ] 21.5 Run `npm run format:check`, `npm run lint`, `npm run typecheck`, all automated tests, `npm run build`, and the production container smoke test
+- [ ] 21.6 Commit the verified slice with message `chore: harden production container`
+
+## 22. Final Quality Gate and Documentation
+
+- [ ] 22.1 Document architecture boundaries, feature anatomy, local setup, environment configuration, database workflows, tests, formatting, and API reference access
+- [ ] 22.2 Document extension recipes for a new module, use case, repository adapter, permission, audit action, and environment value
+- [ ] 22.3 Set representative coverage thresholds based on implemented modules and make the coverage command enforce them
+- [ ] 22.4 Run the complete workflow from a clean checkout, including dependency install, Prettier check, lint, typecheck, all test layers, migrations, build, and Compose smoke test
+- [ ] 22.5 Review generated OpenAPI output, container contents, logs, metrics labels, and repository files for leaked secrets or internal fields
+- [ ] 22.6 Commit the verified baseline with message `docs: finalize backend boilerplate`

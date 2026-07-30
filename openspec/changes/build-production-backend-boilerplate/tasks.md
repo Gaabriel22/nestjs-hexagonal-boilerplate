@@ -5,15 +5,15 @@
 - [x] 1.3 Add a minimal Fastify bootstrap and root module with graceful shutdown enabled
 - [x] 1.4 Add a bootstrap smoke test that starts and closes the application
 - [x] 1.5 Run `npm run lint`, `npm run typecheck`, `npm run test`, and `npm run build`
-- [ ] 1.6 Commit the verified slice with message `chore: bootstrap NestJS Fastify application`
+- [x] 1.6 Commit the verified slice with message `chore: bootstrap NestJS Fastify application`
 
 ## 2. Prettier Formatting
 
-- [ ] 2.1 Install Prettier as a development dependency and commit the canonical project configuration
-- [ ] 2.2 Add `.prettierignore` entries for dependencies, generated Prisma code, build output, coverage, and local artifacts
-- [ ] 2.3 Add `format` and non-mutating `format:check` npm scripts and remove overlapping ESLint formatting rules
-- [ ] 2.4 Format existing supported files and document editor-independent usage
-- [ ] 2.5 Run `npm run format:check`, `npm run lint`, `npm run typecheck`, and `npm run test`
+- [x] 2.1 Install Prettier as a development dependency and commit the canonical project configuration
+- [x] 2.2 Add `.prettierignore` entries for dependencies, generated Prisma code, build output, coverage, and local artifacts
+- [x] 2.3 Add `format` and non-mutating `format:check` npm scripts and remove overlapping ESLint formatting rules
+- [x] 2.4 Format existing supported files and document editor-independent usage
+- [x] 2.5 Run `npm run format:check`, `npm run lint`, `npm run typecheck`, and `npm run test`
 - [ ] 2.6 Commit the verified slice with message `chore: enforce Prettier formatting`
 
 ## 3. Test Harness and Architecture Guardrails

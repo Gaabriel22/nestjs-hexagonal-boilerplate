@@ -1,0 +1,8 @@
+node_modules/
+.codex/
+dist/
+coverage/
+src/generated/
+prisma/generated/
+*.tsbuildinfo
+package-lock.json

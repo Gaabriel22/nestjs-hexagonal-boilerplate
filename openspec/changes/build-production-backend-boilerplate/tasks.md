@@ -14,16 +14,16 @@
 - [x] 2.3 Add `format` and non-mutating `format:check` npm scripts and remove overlapping ESLint formatting rules
 - [x] 2.4 Format existing supported files and document editor-independent usage
 - [x] 2.5 Run `npm run format:check`, `npm run lint`, `npm run typecheck`, and `npm run test`
-- [ ] 2.6 Commit the verified slice with message `chore: enforce Prettier formatting`
+- [x] 2.6 Commit the verified slice with message `chore: enforce Prettier formatting`
 
 ## 3. Test Harness and Architecture Guardrails
 
-- [ ] 3.1 Configure separate unit, integration, architecture, and end-to-end test projects or commands
-- [ ] 3.2 Add deterministic shared test builders and lifecycle cleanup helpers
-- [ ] 3.3 Create feature-first folders for shared, identity, users, organizations, and audit modules
-- [ ] 3.4 Add architecture tests that reject NestJS, Fastify, Prisma, and HTTP imports from domain code
-- [ ] 3.5 Add architecture tests that reject HTTP and concrete persistence imports from application code
-- [ ] 3.6 Run `npm run format:check`, `npm run lint`, `npm run typecheck`, and the unit and architecture test commands
+- [x] 3.1 Configure separate unit, integration, architecture, and end-to-end test projects or commands
+- [x] 3.2 Add deterministic shared test builders and lifecycle cleanup helpers
+- [x] 3.3 Create feature-first folders for shared, identity, users, organizations, and audit modules
+- [x] 3.4 Add architecture tests that reject NestJS, Fastify, Prisma, and HTTP imports from domain code
+- [x] 3.5 Add architecture tests that reject HTTP and concrete persistence imports from application code
+- [x] 3.6 Run `npm run format:check`, `npm run lint`, `npm run typecheck`, and the unit and architecture test commands
 - [ ] 3.7 Commit the verified slice with message `test: establish layered test harness`
 
 ## 4. Typed Configuration

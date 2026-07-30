@@ -1,12 +1,10 @@
 /** @type {import('jest').Config} */
 module.exports = {
-  clearMocks: true,
   collectCoverageFrom: ['src/**/*.ts', '!src/main.ts'],
-  moduleFileExtensions: ['js', 'json', 'ts'],
-  rootDir: '.',
-  testEnvironment: 'node',
-  testMatch: ['<rootDir>/test/**/*.spec.ts'],
-  transform: {
-    '^.+\\.ts$': ['ts-jest', { tsconfig: 'tsconfig.json' }],
-  },
+  projects: [
+    '<rootDir>/jest.unit.config.cjs',
+    '<rootDir>/jest.integration.config.cjs',
+    '<rootDir>/jest.architecture.config.cjs',
+    '<rootDir>/jest.e2e.config.cjs',
+  ],
 }

@@ -54,16 +54,16 @@
 - [x] 6.4 Add a first connectivity integration test and guarantee client shutdown after suites
 - [x] 6.5 Add a migration smoke test that applies all migrations to an empty test database
 - [x] 6.6 Run `npm run format:check`, `npm run lint`, `npm run typecheck`, integration tests, and `npm run build`
-- [ ] 6.7 Commit the verified slice with message `feat: add Prisma PostgreSQL infrastructure`
+- [x] 6.7 Commit the verified slice with message `feat: add Prisma PostgreSQL infrastructure`
 
 ## 7. Identity Persistence Model
 
-- [ ] 7.1 Model users, credentials, and sessions with UUID identifiers, timezone-aware timestamps, constraints, and relations
-- [ ] 7.2 Add normalized unique email storage and indexes for session ownership, activity, expiry, and token lookup
-- [ ] 7.3 Generate and review the identity migration SQL for constraints, foreign keys, and indexes
-- [ ] 7.4 Implement infrastructure mappers and repository adapters behind identity ports
-- [ ] 7.5 Add integration tests for user uniqueness, session lookup, ownership isolation, expiry fields, and repository mappings
-- [ ] 7.6 Run `npm run format:check`, `npm run lint`, `npm run typecheck`, architecture tests, integration tests, and `npm run build`
+- [x] 7.1 Model users, credentials, and sessions with UUID identifiers, timezone-aware timestamps, constraints, and relations
+- [x] 7.2 Add normalized unique email storage and indexes for session ownership, activity, expiry, and token lookup
+- [x] 7.3 Generate and review the identity migration SQL for constraints, foreign keys, and indexes
+- [x] 7.4 Implement infrastructure mappers and repository adapters behind identity ports
+- [x] 7.5 Add integration tests for user uniqueness, session lookup, ownership isolation, expiry fields, and repository mappings
+- [x] 7.6 Run `npm run format:check`, `npm run lint`, `npm run typecheck`, architecture tests, integration tests, and `npm run build`
 - [ ] 7.7 Commit the verified slice with message `feat: add identity persistence model`
 
 ## 8. Registration

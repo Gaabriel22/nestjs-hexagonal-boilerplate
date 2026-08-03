@@ -8,6 +8,8 @@
     "node": ">=24"
   },
   "scripts": {
+    "postinstall": "prisma generate",
+    "prebuild": "npm run db:generate",
     "build": "nest build",
     "dev": "nest start --watch",
     "start": "node dist/main.js",
@@ -18,10 +20,15 @@
     "typecheck": "tsc --noEmit",
     "test": "jest --config jest.config.cjs --runInBand",
     "test:unit": "jest --config jest.unit.config.cjs --runInBand",
+    "pretest:integration": "npm run db:test:prepare",
     "test:integration": "jest --config jest.integration.config.cjs --runInBand --passWithNoTests",
     "test:architecture": "jest --config jest.architecture.config.cjs --runInBand",
     "test:e2e": "jest --config jest.e2e.config.cjs --runInBand",
-    "test:watch": "jest --config jest.unit.config.cjs --watch"
+    "test:watch": "jest --config jest.unit.config.cjs --watch",
+    "db:generate": "prisma generate",
+    "db:migrate:dev": "prisma migrate dev",
+    "db:migrate:deploy": "prisma migrate deploy",
+    "db:test:prepare": "cross-env NODE_ENV=test tsx test/support/prepare-test-database.ts"
   },
   "dependencies": {
     "@fastify/cors": "^11.3.0",
@@ -31,9 +38,12 @@
     "@nestjs/config": "^4.0.4",
     "@nestjs/core": "^11.1.28",
     "@nestjs/platform-fastify": "^11.1.28",
+    "@prisma/adapter-pg": "^7.9.1",
+    "@prisma/client": "^7.9.1",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.15.1",
     "dotenv": "^17.4.2",
+    "pg": "^8.22.0",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.2",
     "zod": "^4.4.3"
@@ -49,11 +59,20 @@
     "@nestjs/testing": "^11.1.28",
     "@types/jest": "^30.0.0",
     "@types/node": "^26.1.2",
+    "@types/pg": "^8.20.0",
+    "cross-env": "^10.1.0",
     "eslint": "^10.8.0",
     "jest": "^30.4.2",
     "prettier": "^3.9.6",
+    "prisma": "^7.9.1",
     "ts-jest": "^29.4.12",
+    "tsx": "^4.23.1",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.65.0"
+  },
+  "allowScripts": {
+    "prisma@7.9.1": true,
+    "@prisma/engines@7.9.1": true,
+    "esbuild@0.28.1": true
   }
 }

@@ -44,16 +44,16 @@
 - [x] 5.4 Configure Fastify-compatible CORS, security headers, request size, and rate-limit policies
 - [x] 5.5 Add end-to-end tests for version routing, valid input, invalid input, known errors, unexpected errors, and request limits
 - [x] 5.6 Run `npm run format:check`, `npm run lint`, `npm run typecheck`, unit tests, end-to-end tests, and `npm run build`
-- [ ] 5.7 Commit the verified slice with message `feat: standardize HTTP platform behavior`
+- [x] 5.7 Commit the verified slice with message `feat: standardize HTTP platform behavior`
 
 ## 6. PostgreSQL and Prisma Foundation
 
-- [ ] 6.1 Add Prisma ORM, the PostgreSQL driver adapter, generator configuration, and database lifecycle provider
-- [ ] 6.2 Add npm scripts for Prisma generation, migration development, migration deployment, and test database preparation
-- [ ] 6.3 Configure a dedicated PostgreSQL integration-test database guard that rejects unsafe database targets
-- [ ] 6.4 Add a first connectivity integration test and guarantee client shutdown after suites
-- [ ] 6.5 Add a migration smoke test that applies all migrations to an empty test database
-- [ ] 6.6 Run `npm run format:check`, `npm run lint`, `npm run typecheck`, integration tests, and `npm run build`
+- [x] 6.1 Add Prisma ORM, the PostgreSQL driver adapter, generator configuration, and database lifecycle provider
+- [x] 6.2 Add npm scripts for Prisma generation, migration development, migration deployment, and test database preparation
+- [x] 6.3 Configure a dedicated PostgreSQL integration-test database guard that rejects unsafe database targets
+- [x] 6.4 Add a first connectivity integration test and guarantee client shutdown after suites
+- [x] 6.5 Add a migration smoke test that applies all migrations to an empty test database
+- [x] 6.6 Run `npm run format:check`, `npm run lint`, `npm run typecheck`, integration tests, and `npm run build`
 - [ ] 6.7 Commit the verified slice with message `feat: add Prisma PostgreSQL infrastructure`
 
 ## 7. Identity Persistence Model

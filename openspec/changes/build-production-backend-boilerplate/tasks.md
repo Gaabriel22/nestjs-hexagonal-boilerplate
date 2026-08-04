@@ -98,16 +98,16 @@
 - [x] 10.5 Add concurrency-focused integration tests for one-time rotation and reuse handling
 - [x] 10.6 Add end-to-end tests for refresh success, reuse rejection, logout, owned revocation, and foreign-session concealment
 - [x] 10.7 Run `npm run format:check`, `npm run lint`, `npm run typecheck`, affected tests, and `npm run build`
-- [ ] 10.8 Commit the verified slice with message `feat: add renewable session management`
+- [x] 10.8 Commit the verified slice with message `feat: add renewable session management`
 
 ## 11. Current User Profile
 
-- [ ] 11.1 Implement current-user profile query and safe application result
-- [ ] 11.2 Implement supported profile updates with immutable and unknown field rejection
-- [ ] 11.3 Add current-user GET and PATCH routes with documented DTOs
-- [ ] 11.4 Add unit and integration tests for reads, valid updates, invalid updates, and persistence mapping
-- [ ] 11.5 Add end-to-end tests for profile secrecy, updates, unauthenticated access, and deactivated-user rejection
-- [ ] 11.6 Run `npm run format:check`, `npm run lint`, `npm run typecheck`, affected tests, and `npm run build`
+- [x] 11.1 Implement current-user profile query and safe application result
+- [x] 11.2 Implement supported profile updates with immutable and unknown field rejection
+- [x] 11.3 Add current-user GET and PATCH routes with documented DTOs
+- [x] 11.4 Add unit and integration tests for reads, valid updates, invalid updates, and persistence mapping
+- [x] 11.5 Add end-to-end tests for profile secrecy, updates, unauthenticated access, and deactivated-user rejection
+- [x] 11.6 Run `npm run format:check`, `npm run lint`, `npm run typecheck`, affected tests, and `npm run build`
 - [ ] 11.7 Commit the verified slice with message `feat: add current user profile`
 
 ## 12. Organization Persistence and Creation

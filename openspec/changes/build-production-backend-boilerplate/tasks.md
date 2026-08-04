@@ -108,17 +108,17 @@
 - [x] 11.4 Add unit and integration tests for reads, valid updates, invalid updates, and persistence mapping
 - [x] 11.5 Add end-to-end tests for profile secrecy, updates, unauthenticated access, and deactivated-user rejection
 - [x] 11.6 Run `npm run format:check`, `npm run lint`, `npm run typecheck`, affected tests, and `npm run build`
-- [ ] 11.7 Commit the verified slice with message `feat: add current user profile`
+- [x] 11.7 Commit the verified slice with message `feat: add current user profile`
 
 ## 12. Organization Persistence and Creation
 
-- [ ] 12.1 Model organizations and memberships with role, active state, timestamps, constraints, and tenant lookup indexes
-- [ ] 12.2 Generate and review the organization migration SQL and foreign-key behavior
-- [ ] 12.3 Define organization and membership domain behavior, repositories, mappers, and application ports
-- [ ] 12.4 Implement atomic organization creation with creator owner membership
-- [ ] 12.5 Add the organization creation route and safe response DTO
-- [ ] 12.6 Add unit, integration, and end-to-end tests for successful creation, rollback, and owner assignment
-- [ ] 12.7 Run `npm run format:check`, `npm run lint`, `npm run typecheck`, architecture tests, affected tests, and `npm run build`
+- [x] 12.1 Model organizations and memberships with role, active state, timestamps, constraints, and tenant lookup indexes
+- [x] 12.2 Generate and review the organization migration SQL and foreign-key behavior
+- [x] 12.3 Define organization and membership domain behavior, repositories, mappers, and application ports
+- [x] 12.4 Implement atomic organization creation with creator owner membership
+- [x] 12.5 Add the organization creation route and safe response DTO
+- [x] 12.6 Add unit, integration, and end-to-end tests for successful creation, rollback, and owner assignment
+- [x] 12.7 Run `npm run format:check`, `npm run lint`, `npm run typecheck`, architecture tests, affected tests, and `npm run build`
 - [ ] 12.8 Commit the verified slice with message `feat: add organization creation`
 
 ## 13. Organization Permissions and Tenant Isolation

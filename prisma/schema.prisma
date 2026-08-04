@@ -17,8 +17,47 @@ model User {
   updatedAt       DateTime    @updatedAt @map("updated_at") @db.Timestamptz
   credential      Credential?
   sessions        Session[]
+  memberships     Membership[]
 
   @@map("users")
+}
+
+enum MembershipRole {
+  owner
+  admin
+  member
+
+  @@map("membership_role")
+}
+
+model Organization {
+  id          String       @id @db.Uuid
+  name        String       @db.VarChar(120)
+  isActive    Boolean      @default(true) @map("is_active")
+  createdAt   DateTime     @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt   DateTime     @updatedAt @map("updated_at") @db.Timestamptz
+  memberships Membership[]
+
+  @@index([isActive, name], map: "organizations_is_active_name_idx")
+  @@map("organizations")
+}
+
+model Membership {
+  id             String         @id @db.Uuid
+  organizationId String         @map("organization_id") @db.Uuid
+  userId         String         @map("user_id") @db.Uuid
+  role           MembershipRole
+  isActive       Boolean        @default(true) @map("is_active")
+  createdAt      DateTime       @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt      DateTime       @updatedAt @map("updated_at") @db.Timestamptz
+  organization   Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user           User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, userId], map: "memberships_organization_id_user_id_key")
+  @@index([organizationId, isActive], map: "memberships_organization_id_is_active_idx")
+  @@index([organizationId, role, isActive], map: "memberships_organization_id_role_is_active_idx")
+  @@index([userId, isActive], map: "memberships_user_id_is_active_idx")
+  @@map("memberships")
 }
 
 model Credential {

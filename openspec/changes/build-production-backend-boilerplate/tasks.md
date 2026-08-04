@@ -75,18 +75,18 @@
 - [x] 8.5 Add unit tests for normalization, password hashing orchestration, duplicate email, and rollback behavior
 - [x] 8.6 Add end-to-end tests for successful registration, invalid input, duplicate normalized email, and response secrecy
 - [x] 8.7 Run `npm run format:check`, `npm run lint`, `npm run typecheck`, affected unit/integration/end-to-end tests, and `npm run build`
-- [ ] 8.8 Commit the verified slice with message `feat: add user registration`
+- [x] 8.8 Commit the verified slice with message `feat: add user registration`
 
 ## 9. Login and Access Authentication
 
-- [ ] 9.1 Implement constant-public-response credential authentication for unknown users and invalid passwords
-- [ ] 9.2 Add signed short-lived access token creation and verification behind application ports
-- [ ] 9.3 Create sessions during successful login while persisting only the keyed refresh-token hash
-- [ ] 9.4 Add login DTOs, controller route, authentication guard, and current request identity context
-- [ ] 9.5 Enforce current user and session activity on protected requests
-- [ ] 9.6 Add unit tests for credential outcomes, access claims, inactive users, and revoked sessions
-- [ ] 9.7 Add end-to-end tests for login success, uniform invalid credentials, missing token, expired token, and invalid token
-- [ ] 9.8 Run `npm run format:check`, `npm run lint`, `npm run typecheck`, affected tests, and `npm run build`
+- [x] 9.1 Implement constant-public-response credential authentication for unknown users and invalid passwords
+- [x] 9.2 Add signed short-lived access token creation and verification behind application ports
+- [x] 9.3 Create sessions during successful login while persisting only the keyed refresh-token hash
+- [x] 9.4 Add login DTOs, controller route, authentication guard, and current request identity context
+- [x] 9.5 Enforce current user and session activity on protected requests
+- [x] 9.6 Add unit tests for credential outcomes, access claims, inactive users, and revoked sessions
+- [x] 9.7 Add end-to-end tests for login success, uniform invalid credentials, missing token, expired token, and invalid token
+- [x] 9.8 Run `npm run format:check`, `npm run lint`, `npm run typecheck`, affected tests, and `npm run build`
 - [ ] 9.9 Commit the verified slice with message `feat: add login and access authentication`
 
 ## 10. Refresh Rotation and Session Revocation

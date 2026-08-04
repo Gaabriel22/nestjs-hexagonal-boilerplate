@@ -13,6 +13,26 @@ export interface IdentitySessionState {
 export class IdentitySession {
   private constructor(private readonly state: IdentitySessionState) {}
 
+  static create(input: {
+    readonly id: string
+    readonly userId: string
+    readonly refreshTokenHash: string
+    readonly expiresAt: Date
+    readonly currentTime: Date
+  }): IdentitySession {
+    return new IdentitySession({
+      id: input.id,
+      userId: input.userId,
+      refreshTokenHash: input.refreshTokenHash,
+      deviceLabel: null,
+      lastActivityAt: input.currentTime,
+      expiresAt: input.expiresAt,
+      revokedAt: null,
+      createdAt: input.currentTime,
+      updatedAt: input.currentTime,
+    })
+  }
+
   static restore(state: IdentitySessionState): IdentitySession {
     return new IdentitySession(state)
   }

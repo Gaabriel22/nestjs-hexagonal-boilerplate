@@ -64,17 +64,17 @@
 - [x] 7.4 Implement infrastructure mappers and repository adapters behind identity ports
 - [x] 7.5 Add integration tests for user uniqueness, session lookup, ownership isolation, expiry fields, and repository mappings
 - [x] 7.6 Run `npm run format:check`, `npm run lint`, `npm run typecheck`, architecture tests, integration tests, and `npm run build`
-- [ ] 7.7 Commit the verified slice with message `feat: add identity persistence model`
+- [x] 7.7 Commit the verified slice with message `feat: add identity persistence model`
 
 ## 8. Registration
 
-- [ ] 8.1 Implement normalized email and credential domain behavior plus password policy errors
-- [ ] 8.2 Add the Argon2id password hasher adapter behind an application port
-- [ ] 8.3 Implement registration as one transaction that creates user and credential records
-- [ ] 8.4 Add registration DTOs, controller route, safe response model, and Problem Details mappings
-- [ ] 8.5 Add unit tests for normalization, password hashing orchestration, duplicate email, and rollback behavior
-- [ ] 8.6 Add end-to-end tests for successful registration, invalid input, duplicate normalized email, and response secrecy
-- [ ] 8.7 Run `npm run format:check`, `npm run lint`, `npm run typecheck`, affected unit/integration/end-to-end tests, and `npm run build`
+- [x] 8.1 Implement normalized email and credential domain behavior plus password policy errors
+- [x] 8.2 Add the Argon2id password hasher adapter behind an application port
+- [x] 8.3 Implement registration as one transaction that creates user and credential records
+- [x] 8.4 Add registration DTOs, controller route, safe response model, and Problem Details mappings
+- [x] 8.5 Add unit tests for normalization, password hashing orchestration, duplicate email, and rollback behavior
+- [x] 8.6 Add end-to-end tests for successful registration, invalid input, duplicate normalized email, and response secrecy
+- [x] 8.7 Run `npm run format:check`, `npm run lint`, `npm run typecheck`, affected unit/integration/end-to-end tests, and `npm run build`
 - [ ] 8.8 Commit the verified slice with message `feat: add user registration`
 
 ## 9. Login and Access Authentication

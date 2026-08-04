@@ -1,3 +1,5 @@
+import { NormalizedEmail } from '../value-objects/normalized-email'
+
 export interface IdentityUserState {
   readonly id: string
   readonly normalizedEmail: string
@@ -8,6 +10,20 @@ export interface IdentityUserState {
 
 export class IdentityUser {
   private constructor(private readonly state: IdentityUserState) {}
+
+  static create(input: {
+    readonly id: string
+    readonly email: string
+    readonly currentTime: Date
+  }): IdentityUser {
+    return new IdentityUser({
+      id: input.id,
+      normalizedEmail: NormalizedEmail.create(input.email).value,
+      isActive: true,
+      createdAt: input.currentTime,
+      updatedAt: input.currentTime,
+    })
+  }
 
   static restore(state: IdentityUserState): IdentityUser {
     return new IdentityUser(state)

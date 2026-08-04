@@ -87,17 +87,17 @@
 - [x] 9.6 Add unit tests for credential outcomes, access claims, inactive users, and revoked sessions
 - [x] 9.7 Add end-to-end tests for login success, uniform invalid credentials, missing token, expired token, and invalid token
 - [x] 9.8 Run `npm run format:check`, `npm run lint`, `npm run typecheck`, affected tests, and `npm run build`
-- [ ] 9.9 Commit the verified slice with message `feat: add login and access authentication`
+- [x] 9.9 Commit the verified slice with message `feat: add login and access authentication`
 
 ## 10. Refresh Rotation and Session Revocation
 
-- [ ] 10.1 Implement atomic opaque refresh-token rotation with conditional session update
-- [ ] 10.2 Add reuse detection that revokes the affected session or token family
-- [ ] 10.3 Implement current-session logout, owned-session listing, and owned-session revocation use cases
-- [ ] 10.4 Add refresh, logout, session list, and session revoke HTTP routes with safe session DTOs
-- [ ] 10.5 Add concurrency-focused integration tests for one-time rotation and reuse handling
-- [ ] 10.6 Add end-to-end tests for refresh success, reuse rejection, logout, owned revocation, and foreign-session concealment
-- [ ] 10.7 Run `npm run format:check`, `npm run lint`, `npm run typecheck`, affected tests, and `npm run build`
+- [x] 10.1 Implement atomic opaque refresh-token rotation with conditional session update
+- [x] 10.2 Add reuse detection that revokes the affected session or token family
+- [x] 10.3 Implement current-session logout, owned-session listing, and owned-session revocation use cases
+- [x] 10.4 Add refresh, logout, session list, and session revoke HTTP routes with safe session DTOs
+- [x] 10.5 Add concurrency-focused integration tests for one-time rotation and reuse handling
+- [x] 10.6 Add end-to-end tests for refresh success, reuse rejection, logout, owned revocation, and foreign-session concealment
+- [x] 10.7 Run `npm run format:check`, `npm run lint`, `npm run typecheck`, affected tests, and `npm run build`
 - [ ] 10.8 Commit the verified slice with message `feat: add renewable session management`
 
 ## 11. Current User Profile

@@ -41,9 +41,21 @@ model Session {
   createdAt        DateTime  @default(now()) @map("created_at") @db.Timestamptz
   updatedAt        DateTime  @updatedAt @map("updated_at") @db.Timestamptz
   user             User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  refreshTokens    SessionRefreshToken[]
 
   @@index([userId, revokedAt], map: "sessions_user_id_revoked_at_idx")
   @@index([userId, lastActivityAt], map: "sessions_user_id_last_activity_at_idx")
   @@index([expiresAt], map: "sessions_expires_at_idx")
   @@map("sessions")
+}
+
+model SessionRefreshToken {
+  tokenHash String    @id @map("token_hash")
+  sessionId String    @map("session_id") @db.Uuid
+  issuedAt  DateTime  @map("issued_at") @db.Timestamptz
+  usedAt    DateTime? @map("used_at") @db.Timestamptz
+  session   Session   @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@index([sessionId, usedAt], map: "session_refresh_tokens_session_id_used_at_idx")
+  @@map("session_refresh_tokens")
 }

@@ -26,12 +26,20 @@ import {
   type RefreshTokenService,
 } from './application/ports/refresh-token.service'
 import {
+  SESSION_MANAGEMENT_REPOSITORY,
+  type SessionManagementRepository,
+} from './application/ports/session-management.repository'
+import {
   REGISTRATION_REPOSITORY,
   type RegistrationRepository,
 } from './application/ports/registration.repository'
 import { RegisterUser } from './application/use-cases/register-user'
 import { AuthenticateAccessToken } from './application/use-cases/authenticate-access-token'
 import { Login } from './application/use-cases/login'
+import { ListActiveSessions } from './application/use-cases/list-active-sessions'
+import { LogoutCurrentSession } from './application/use-cases/logout-current-session'
+import { RefreshSession } from './application/use-cases/refresh-session'
+import { RevokeOwnedSession } from './application/use-cases/revoke-owned-session'
 import { CREDENTIAL_REPOSITORY } from './domain/repositories/credential.repository'
 import { SESSION_REPOSITORY } from './domain/repositories/session.repository'
 import { USER_REPOSITORY } from './domain/repositories/user.repository'
@@ -41,6 +49,7 @@ import { PrismaAuthenticationRepository } from './infrastructure/persistence/pri
 import { PrismaCredentialRepository } from './infrastructure/persistence/prisma/repositories/prisma-credential.repository'
 import { PrismaRegistrationRepository } from './infrastructure/persistence/prisma/repositories/prisma-registration.repository'
 import { PrismaSessionRepository } from './infrastructure/persistence/prisma/repositories/prisma-session.repository'
+import { PrismaSessionManagementRepository } from './infrastructure/persistence/prisma/repositories/prisma-session-management.repository'
 import { PrismaUserRepository } from './infrastructure/persistence/prisma/repositories/prisma-user.repository'
 import { Argon2idPasswordHasher } from './infrastructure/security/argon2id-password-hasher'
 import { Argon2idCredentialAuthenticator } from './infrastructure/security/argon2id-credential-authenticator'
@@ -62,6 +71,7 @@ import { JwtAccessTokenService } from './infrastructure/security/jwt-access-toke
     Argon2idCredentialAuthenticator,
     JwtAccessTokenService,
     HmacRefreshTokenService,
+    PrismaSessionManagementRepository,
     AccessAuthenticationGuard,
     {
       provide: USER_REPOSITORY,
@@ -106,6 +116,10 @@ import { JwtAccessTokenService } from './infrastructure/security/jwt-access-toke
     {
       provide: REFRESH_TOKEN_SERVICE,
       useExisting: HmacRefreshTokenService,
+    },
+    {
+      provide: SESSION_MANAGEMENT_REPOSITORY,
+      useExisting: PrismaSessionManagementRepository,
     },
     {
       provide: RegisterUser,
@@ -153,6 +167,34 @@ import { JwtAccessTokenService } from './infrastructure/security/jwt-access-toke
         repository: AuthenticationRepository,
         clock: Clock,
       ): AuthenticateAccessToken => new AuthenticateAccessToken(accessTokens, repository, clock),
+    },
+    {
+      provide: RefreshSession,
+      inject: [SESSION_MANAGEMENT_REPOSITORY, ACCESS_TOKEN_SERVICE, REFRESH_TOKEN_SERVICE, CLOCK],
+      useFactory: (
+        repository: SessionManagementRepository,
+        accessTokens: AccessTokenService,
+        refreshTokens: RefreshTokenService,
+        clock: Clock,
+      ): RefreshSession => new RefreshSession(repository, accessTokens, refreshTokens, clock),
+    },
+    {
+      provide: LogoutCurrentSession,
+      inject: [SESSION_MANAGEMENT_REPOSITORY, CLOCK],
+      useFactory: (repository: SessionManagementRepository, clock: Clock): LogoutCurrentSession =>
+        new LogoutCurrentSession(repository, clock),
+    },
+    {
+      provide: ListActiveSessions,
+      inject: [SESSION_MANAGEMENT_REPOSITORY, CLOCK],
+      useFactory: (repository: SessionManagementRepository, clock: Clock): ListActiveSessions =>
+        new ListActiveSessions(repository, clock),
+    },
+    {
+      provide: RevokeOwnedSession,
+      inject: [SESSION_MANAGEMENT_REPOSITORY, CLOCK],
+      useFactory: (repository: SessionManagementRepository, clock: Clock): RevokeOwnedSession =>
+        new RevokeOwnedSession(repository, clock),
     },
   ],
   exports: [

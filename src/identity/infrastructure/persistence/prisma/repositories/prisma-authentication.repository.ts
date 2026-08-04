@@ -32,7 +32,16 @@ export class PrismaAuthenticationRepository implements AuthenticationRepository 
   }
 
   async createSession(session: IdentitySession): Promise<void> {
-    await this.prisma.session.create({ data: PrismaSessionMapper.toPersistence(session) })
+    await this.prisma.$transaction(async (transaction) => {
+      await transaction.session.create({ data: PrismaSessionMapper.toPersistence(session) })
+      await transaction.sessionRefreshToken.create({
+        data: {
+          tokenHash: session.refreshTokenHash,
+          sessionId: session.id,
+          issuedAt: session.createdAt,
+        },
+      })
+    })
   }
 
   async findActiveIdentity(

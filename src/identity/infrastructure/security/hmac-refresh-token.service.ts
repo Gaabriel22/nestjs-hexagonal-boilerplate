@@ -22,12 +22,16 @@ export class HmacRefreshTokenService implements RefreshTokenService {
 
   issue(currentTime: Date): IssuedRefreshToken {
     const token = randomBytes(32).toString('base64url')
-    const tokenHash = createHmac('sha256', this.hashSecret).update(token).digest('hex')
+    const tokenHash = this.hash(token)
 
     return {
       token,
       tokenHash,
       expiresAt: new Date(currentTime.getTime() + this.ttlMilliseconds),
     }
+  }
+
+  hash(token: string): string {
+    return createHmac('sha256', this.hashSecret).update(token).digest('hex')
   }
 }

@@ -41,6 +41,7 @@ describe('Login', () => {
         tokenHash: 'keyed-token-hash',
         expiresAt: new Date('2026-02-01T10:00:00.000Z'),
       }),
+      hash: jest.fn().mockReturnValue('keyed-token-hash'),
     }
     const identifiers: IdentifierGenerator = { generate: () => SESSION_ID }
     const clock: Clock = { now: () => NOW }

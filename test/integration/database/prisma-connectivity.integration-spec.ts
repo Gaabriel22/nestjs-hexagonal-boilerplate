@@ -53,10 +53,11 @@ describe('Prisma PostgreSQL infrastructure', () => {
       ORDER BY migration_name
     `
 
-    expect(migrations).toHaveLength(2)
+    expect(migrations).toHaveLength(3)
     expect(migrations.map(({ migrationName }) => migrationName)).toEqual([
       '20260731000000_postgresql_foundation',
       '20260803221953_identity_persistence',
+      '20260804000000_session_refresh_rotation',
     ])
     expect(migrations.every(({ finishedAt }) => finishedAt instanceof Date)).toBe(true)
     expect(migrations.every(({ rolledBackAt }) => rolledBackAt === null)).toBe(true)

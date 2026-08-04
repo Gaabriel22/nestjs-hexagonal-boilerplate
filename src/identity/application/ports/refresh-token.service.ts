@@ -8,4 +8,5 @@ export interface IssuedRefreshToken {
 
 export interface RefreshTokenService {
   issue(currentTime: Date): IssuedRefreshToken
+  hash(token: string): string
 }

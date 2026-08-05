@@ -119,17 +119,17 @@
 - [x] 12.5 Add the organization creation route and safe response DTO
 - [x] 12.6 Add unit, integration, and end-to-end tests for successful creation, rollback, and owner assignment
 - [x] 12.7 Run `npm run format:check`, `npm run lint`, `npm run typecheck`, architecture tests, affected tests, and `npm run build`
-- [ ] 12.8 Commit the verified slice with message `feat: add organization creation`
+- [x] 12.8 Commit the verified slice with message `feat: add organization creation`
 
 ## 13. Organization Permissions and Tenant Isolation
 
-- [ ] 13.1 Define owner, admin, and member permission mappings as explicit application policy
-- [ ] 13.2 Implement organization membership and permission guards using current persisted membership state
-- [ ] 13.3 Require organization identifiers in organization-scoped repository contracts and queries
-- [ ] 13.4 Implement cursor-paginated membership listing
-- [ ] 13.5 Add unit tests covering every role-to-permission mapping and inactive membership
-- [ ] 13.6 Add integration and end-to-end tests proving unrelated and cross-tenant identifiers cannot expose data
-- [ ] 13.7 Run `npm run format:check`, `npm run lint`, `npm run typecheck`, architecture tests, affected tests, and `npm run build`
+- [x] 13.1 Define owner, admin, and member permission mappings as explicit application policy
+- [x] 13.2 Implement organization membership and permission guards using current persisted membership state
+- [x] 13.3 Require organization identifiers in organization-scoped repository contracts and queries
+- [x] 13.4 Implement cursor-paginated membership listing
+- [x] 13.5 Add unit tests covering every role-to-permission mapping and inactive membership
+- [x] 13.6 Add integration and end-to-end tests proving unrelated and cross-tenant identifiers cannot expose data
+- [x] 13.7 Run `npm run format:check`, `npm run lint`, `npm run typecheck`, architecture tests, affected tests, and `npm run build`
 - [ ] 13.8 Commit the verified slice with message `feat: enforce organization access control`
 
 ## 14. Membership Administration

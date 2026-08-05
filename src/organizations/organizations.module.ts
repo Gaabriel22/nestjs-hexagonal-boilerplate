@@ -12,10 +12,16 @@ import {
   ORGANIZATION_CREATION_REPOSITORY,
   type OrganizationCreationRepository,
 } from './application/ports/organization-creation.repository'
+import {
+  ORGANIZATION_ACCESS_REPOSITORY,
+  type OrganizationAccessRepository,
+} from './application/ports/organization-access.repository'
 import { CreateOrganization } from './application/use-cases/create-organization'
+import { ListOrganizationMemberships } from './application/use-cases/list-organization-memberships'
 import { MEMBERSHIP_REPOSITORY } from './domain/repositories/membership.repository'
 import { ORGANIZATION_REPOSITORY } from './domain/repositories/organization.repository'
 import { OrganizationsController } from './infrastructure/http/organizations.controller'
+import { OrganizationPermissionGuard } from './infrastructure/http/organization-permission.guard'
 import { PrismaMembershipRepository } from './infrastructure/persistence/prisma/repositories/prisma-membership.repository'
 import { PrismaOrganizationCreationRepository } from './infrastructure/persistence/prisma/repositories/prisma-organization-creation.repository'
 import { PrismaOrganizationRepository } from './infrastructure/persistence/prisma/repositories/prisma-organization.repository'
@@ -27,10 +33,12 @@ import { PrismaOrganizationRepository } from './infrastructure/persistence/prism
     PrismaOrganizationRepository,
     PrismaMembershipRepository,
     PrismaOrganizationCreationRepository,
+    OrganizationPermissionGuard,
     CryptoIdentifierGenerator,
     SystemClock,
     { provide: ORGANIZATION_REPOSITORY, useExisting: PrismaOrganizationRepository },
     { provide: MEMBERSHIP_REPOSITORY, useExisting: PrismaMembershipRepository },
+    { provide: ORGANIZATION_ACCESS_REPOSITORY, useExisting: PrismaMembershipRepository },
     {
       provide: ORGANIZATION_CREATION_REPOSITORY,
       useExisting: PrismaOrganizationCreationRepository,
@@ -46,7 +54,13 @@ import { PrismaOrganizationRepository } from './infrastructure/persistence/prism
         clock: Clock,
       ): CreateOrganization => new CreateOrganization(repository, identifiers, clock),
     },
+    {
+      provide: ListOrganizationMemberships,
+      inject: [ORGANIZATION_ACCESS_REPOSITORY],
+      useFactory: (repository: OrganizationAccessRepository): ListOrganizationMemberships =>
+        new ListOrganizationMemberships(repository),
+    },
   ],
-  exports: [ORGANIZATION_REPOSITORY, MEMBERSHIP_REPOSITORY],
+  exports: [ORGANIZATION_REPOSITORY, MEMBERSHIP_REPOSITORY, ORGANIZATION_ACCESS_REPOSITORY],
 })
 export class OrganizationsModule {}

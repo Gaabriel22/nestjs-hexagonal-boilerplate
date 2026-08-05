@@ -23,10 +23,16 @@ function flattenValidationErrors(
 }
 
 export function createValidationException(errors: readonly ValidationError[]): BadRequestException {
+  return createFieldValidationException(flattenValidationErrors(errors))
+}
+
+export function createFieldValidationException(
+  errors: readonly ValidationProblemField[],
+): BadRequestException {
   const response: ValidationExceptionResponse = {
     code: 'request.validation_failed',
     detail: 'Request validation failed',
-    errors: flattenValidationErrors(errors),
+    errors,
   }
 
   return new BadRequestException(response)

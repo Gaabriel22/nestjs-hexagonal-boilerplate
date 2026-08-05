@@ -1,4 +1,5 @@
 import type { Clock } from '../../../shared/application/ports/clock'
+import type { IdentifierGenerator } from '../../../shared/application/ports/identifier-generator'
 import { OrganizationAccessDeniedError } from '../errors/organization-access-denied.error'
 import { OrganizationMembershipNotFoundError } from '../errors/organization-membership-not-found.error'
 import { OwnerMembershipProtectedError } from '../errors/owner-membership-protected.error'
@@ -19,12 +20,17 @@ export class ChangeOrganizationMembershipRole {
   constructor(
     private readonly repository: MembershipAdministrationRepository,
     private readonly clock: Clock,
+    private readonly identifiers: IdentifierGenerator,
   ) {}
 
   async execute(
     input: ChangeOrganizationMembershipRoleInput,
   ): Promise<ActiveOrganizationMembershipView> {
-    const result = await this.repository.changeRole({ ...input, currentTime: this.clock.now() })
+    const result = await this.repository.changeRole({
+      ...input,
+      currentTime: this.clock.now(),
+      audit: { eventId: this.identifiers.generate() },
+    })
 
     switch (result.outcome) {
       case 'changed':

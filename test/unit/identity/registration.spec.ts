@@ -15,6 +15,7 @@ import type { Clock } from '../../../src/shared/application/ports/clock'
 import type { IdentifierGenerator } from '../../../src/shared/application/ports/identifier-generator'
 
 const USER_ID = '00000000-0000-4000-8000-000000000001'
+const AUDIT_EVENT_ID = '00000000-0000-4000-8000-000000000002'
 const CURRENT_TIME = new Date('2026-01-01T10:00:00.000Z')
 const VALID_PASSWORD = 'Registration password 1!'
 
@@ -50,7 +51,9 @@ describe('RegisterUser', () => {
     registrationRepository = {
       createUserWithCredential: jest.fn().mockResolvedValue('created'),
     }
-    identifierGenerator = { generate: jest.fn().mockReturnValue(USER_ID) }
+    identifierGenerator = {
+      generate: jest.fn().mockReturnValueOnce(USER_ID).mockReturnValue(AUDIT_EVENT_ID),
+    }
     clock = { now: jest.fn().mockReturnValue(CURRENT_TIME) }
     registerUser = new RegisterUser(
       passwordHasher,
@@ -77,7 +80,7 @@ describe('RegisterUser', () => {
       throw new Error('Expected registration persistence call')
     }
 
-    const [persistedUser, persistedCredential] = persistenceCall
+    const [persistedUser, persistedCredential, auditEvent] = persistenceCall
     expect(persistedUser).toMatchObject({
       id: USER_ID,
       normalizedEmail: 'person@example.com',
@@ -85,6 +88,17 @@ describe('RegisterUser', () => {
     expect(persistedCredential).toMatchObject({
       userId: USER_ID,
       passwordHash: 'argon2id-hash',
+    })
+    expect(auditEvent.toPrimitives()).toEqual({
+      id: AUDIT_EVENT_ID,
+      actorUserId: USER_ID,
+      organizationId: null,
+      action: 'identity.user_registered',
+      targetType: 'user',
+      targetId: USER_ID,
+      requestIdentifier: null,
+      metadata: {},
+      occurredAt: CURRENT_TIME,
     })
   })
 

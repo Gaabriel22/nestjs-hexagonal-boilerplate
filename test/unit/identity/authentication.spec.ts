@@ -10,6 +10,7 @@ import type { IdentifierGenerator } from '../../../src/shared/application/ports/
 
 const USER_ID = '00000000-0000-4000-8000-000000000301'
 const SESSION_ID = '00000000-0000-4000-8000-000000000302'
+const AUDIT_EVENT_ID = '00000000-0000-4000-8000-000000000303'
 const NOW = new Date('2026-01-01T10:00:00.000Z')
 
 describe('Login', () => {
@@ -43,7 +44,10 @@ describe('Login', () => {
       }),
       hash: jest.fn().mockReturnValue('keyed-token-hash'),
     }
-    const identifiers: IdentifierGenerator = { generate: () => SESSION_ID }
+    const generatedIds = [SESSION_ID, AUDIT_EVENT_ID]
+    const identifiers: IdentifierGenerator = {
+      generate: () => generatedIds.shift() ?? 'unexpected-id',
+    }
     const clock: Clock = { now: () => NOW }
     login = new Login(repository, authenticator, accessTokens, refreshTokens, identifiers, clock)
   })
@@ -58,8 +62,16 @@ describe('Login', () => {
     })
     expect(accessTokens.issue.mock.calls).toEqual([[{ userId: USER_ID, sessionId: SESSION_ID }]])
     const session = repository.createSession.mock.calls[0]?.[0]
+    const auditEvent = repository.createSession.mock.calls[0]?.[1]
     expect(session?.refreshTokenHash).toBe('keyed-token-hash')
     expect(JSON.stringify(session)).not.toContain('opaque-refresh-token')
+    expect(auditEvent?.toPrimitives()).toMatchObject({
+      id: AUDIT_EVENT_ID,
+      actorUserId: USER_ID,
+      action: 'identity.session_created',
+      targetId: SESSION_ID,
+      metadata: {},
+    })
   })
 
   it.each([

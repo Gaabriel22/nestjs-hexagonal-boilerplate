@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common'
 
+import type { AuditEvent } from '../../../../../audit/domain/audit-event'
 import type {
   RegistrationPersistenceResult,
   RegistrationRepository,
@@ -25,6 +26,7 @@ export class PrismaRegistrationRepository implements RegistrationRepository {
   async createUserWithCredential(
     user: IdentityUser,
     credential: Credential,
+    auditEvent: AuditEvent,
   ): Promise<RegistrationPersistenceResult> {
     try {
       await this.prisma.$transaction(async (transaction) => {
@@ -32,6 +34,7 @@ export class PrismaRegistrationRepository implements RegistrationRepository {
         await transaction.credential.create({
           data: PrismaCredentialMapper.toPersistence(credential),
         })
+        await transaction.auditEvent.create({ data: auditEvent.toPrimitives() })
       })
     } catch (error: unknown) {
       if (isUniqueConstraintError(error)) {

@@ -1,3 +1,4 @@
+import type { AuditEvent } from '../../../audit/domain/audit-event'
 import type { Organization } from '../../domain/entities/organization'
 import type { OrganizationMembership } from '../../domain/entities/organization-membership'
 
@@ -7,5 +8,6 @@ export interface OrganizationCreationRepository {
   createWithOwner(
     organization: Organization,
     ownerMembership: OrganizationMembership,
+    auditEvent: AuditEvent,
   ): Promise<void>
 }

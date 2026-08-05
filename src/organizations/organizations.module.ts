@@ -69,20 +69,23 @@ import { PrismaOrganizationRepository } from './infrastructure/persistence/prism
     },
     {
       provide: ChangeOrganizationMembershipRole,
-      inject: [MEMBERSHIP_ADMINISTRATION_REPOSITORY, CLOCK],
+      inject: [MEMBERSHIP_ADMINISTRATION_REPOSITORY, CLOCK, IDENTIFIER_GENERATOR],
       useFactory: (
         repository: MembershipAdministrationRepository,
         clock: Clock,
+        identifiers: IdentifierGenerator,
       ): ChangeOrganizationMembershipRole =>
-        new ChangeOrganizationMembershipRole(repository, clock),
+        new ChangeOrganizationMembershipRole(repository, clock, identifiers),
     },
     {
       provide: RemoveOrganizationMembership,
-      inject: [MEMBERSHIP_ADMINISTRATION_REPOSITORY, CLOCK],
+      inject: [MEMBERSHIP_ADMINISTRATION_REPOSITORY, CLOCK, IDENTIFIER_GENERATOR],
       useFactory: (
         repository: MembershipAdministrationRepository,
         clock: Clock,
-      ): RemoveOrganizationMembership => new RemoveOrganizationMembership(repository, clock),
+        identifiers: IdentifierGenerator,
+      ): RemoveOrganizationMembership =>
+        new RemoveOrganizationMembership(repository, clock, identifiers),
     },
   ],
   exports: [

@@ -141,16 +141,16 @@
 - [x] 14.5 Add unit and integration tests for valid changes, forbidden changes, stale roles, and last-owner protection
 - [x] 14.6 Add end-to-end tests for administration success, HTTP 403 failures, and immediate authorization changes
 - [x] 14.7 Run `npm run format:check`, `npm run lint`, `npm run typecheck`, affected tests, and `npm run build`
-- [ ] 14.8 Commit the verified slice with message `feat: add membership administration`
+- [x] 14.8 Commit the verified slice with message `feat: add membership administration`
 
 ## 15. Audit Persistence and Recording
 
-- [ ] 15.1 Model immutable audit events with actor, organization, action, target, request identifier, safe metadata, and query indexes
-- [ ] 15.2 Generate and review the audit migration SQL
-- [ ] 15.3 Implement the audit append port and Prisma adapter with an explicit metadata allowlist
-- [ ] 15.4 Integrate audit appends into registration/session security and organization administration transactions where specified
-- [ ] 15.5 Add integration tests for atomic success/rollback, immutability, tenant ownership, and sensitive-data exclusion
-- [ ] 15.6 Run `npm run format:check`, `npm run lint`, `npm run typecheck`, affected unit/integration tests, and `npm run build`
+- [x] 15.1 Model immutable audit events with actor, organization, action, target, request identifier, safe metadata, and query indexes
+- [x] 15.2 Generate and review the audit migration SQL
+- [x] 15.3 Implement the audit append port and Prisma adapter with an explicit metadata allowlist
+- [x] 15.4 Integrate audit appends into registration/session security and organization administration transactions where specified
+- [x] 15.5 Add integration tests for atomic success/rollback, immutability, tenant ownership, and sensitive-data exclusion
+- [x] 15.6 Run `npm run format:check`, `npm run lint`, `npm run typecheck`, affected unit/integration tests, and `npm run build`
 - [ ] 15.7 Commit the verified slice with message `feat: record immutable audit events`
 
 ## 16. Audit Retrieval

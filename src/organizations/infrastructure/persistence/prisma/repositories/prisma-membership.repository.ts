@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common'
 
+import { AuditEvent } from '../../../../../audit/domain/audit-event'
 import type {
   ChangeMembershipRoleInput,
   ChangeMembershipRoleResult,
@@ -126,6 +127,20 @@ export class PrismaMembershipRepository
         }
 
         if (target.role === input.role) {
+          await transaction.auditEvent.create({
+            data: AuditEvent.create({
+              id: input.audit.eventId,
+              actorUserId: input.actorUserId,
+              organizationId: input.organizationId,
+              action: 'organization.membership_role_changed',
+              targetType: 'membership',
+              targetId: target.id,
+              requestIdentifier: input.audit.requestIdentifier,
+              metadata: { previousRole: target.role, role: input.role },
+              occurredAt: input.currentTime,
+            }).toPrimitives(),
+          })
+
           return { outcome: 'changed', membership: target }
         }
 
@@ -142,6 +157,20 @@ export class PrismaMembershipRepository
         if (changed.count !== 1) {
           return { outcome: 'not_found' }
         }
+
+        await transaction.auditEvent.create({
+          data: AuditEvent.create({
+            id: input.audit.eventId,
+            actorUserId: input.actorUserId,
+            organizationId: input.organizationId,
+            action: 'organization.membership_role_changed',
+            targetType: 'membership',
+            targetId: target.id,
+            requestIdentifier: input.audit.requestIdentifier,
+            metadata: { previousRole: target.role, role: input.role },
+            occurredAt: input.currentTime,
+          }).toPrimitives(),
+        })
 
         return {
           outcome: 'changed',
@@ -204,6 +233,22 @@ export class PrismaMembershipRepository
               where: { id: target.id, organizationId: input.organizationId, isActive: true },
               data: { isActive: false, updatedAt: input.currentTime },
             })
+
+            if (removed.count === 1) {
+              await transaction.auditEvent.create({
+                data: AuditEvent.create({
+                  id: input.audit.eventId,
+                  actorUserId: input.actorUserId,
+                  organizationId: input.organizationId,
+                  action: 'organization.membership_removed',
+                  targetType: 'membership',
+                  targetId: target.id,
+                  requestIdentifier: input.audit.requestIdentifier,
+                  metadata: { role: target.role },
+                  occurredAt: input.currentTime,
+                }).toPrimitives(),
+              })
+            }
 
             return removed.count === 1 ? { outcome: 'removed' } : { outcome: 'not_found' }
           },

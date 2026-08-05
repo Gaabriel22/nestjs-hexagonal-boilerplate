@@ -1,4 +1,5 @@
 import type { Clock } from '../../../shared/application/ports/clock'
+import type { IdentifierGenerator } from '../../../shared/application/ports/identifier-generator'
 import { InvalidRefreshTokenError } from '../errors/invalid-refresh-token.error'
 import type { AccessTokenService } from '../ports/access-token.service'
 import type { RefreshTokenService } from '../ports/refresh-token.service'
@@ -17,6 +18,7 @@ export class RefreshSession {
     private readonly accessTokens: AccessTokenService,
     private readonly refreshTokens: RefreshTokenService,
     private readonly clock: Clock,
+    private readonly identifiers: IdentifierGenerator,
   ) {}
 
   async execute(refreshToken: string): Promise<RefreshSessionResult> {
@@ -27,6 +29,7 @@ export class RefreshSession {
       replacementTokenHash: replacement.tokenHash,
       replacementExpiresAt: replacement.expiresAt,
       currentTime,
+      audit: { eventId: this.identifiers.generate() },
     })
 
     if (rotation.outcome !== 'rotated') {

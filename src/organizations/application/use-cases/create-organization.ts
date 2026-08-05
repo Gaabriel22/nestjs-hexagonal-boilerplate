@@ -1,3 +1,4 @@
+import { AuditEvent } from '../../../audit/domain/audit-event'
 import type { Clock } from '../../../shared/application/ports/clock'
 import type { IdentifierGenerator } from '../../../shared/application/ports/identifier-generator'
 import { Organization } from '../../domain/entities/organization'
@@ -47,7 +48,19 @@ export class CreateOrganization {
       currentTime,
     })
 
-    await this.repository.createWithOwner(organization, ownerMembership)
+    await this.repository.createWithOwner(
+      organization,
+      ownerMembership,
+      AuditEvent.create({
+        id: this.identifiers.generate(),
+        actorUserId: command.actorUserId,
+        organizationId: organization.id,
+        action: 'organization.created',
+        targetType: 'organization',
+        targetId: organization.id,
+        occurredAt: currentTime,
+      }),
+    )
 
     return {
       id: organization.id,

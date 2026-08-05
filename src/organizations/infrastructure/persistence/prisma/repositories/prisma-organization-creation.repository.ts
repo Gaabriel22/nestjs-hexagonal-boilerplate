@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common'
 
+import type { AuditEvent } from '../../../../../audit/domain/audit-event'
 import type { OrganizationCreationRepository } from '../../../../application/ports/organization-creation.repository'
 import type { Organization } from '../../../../domain/entities/organization'
 import type { OrganizationMembership } from '../../../../domain/entities/organization-membership'
@@ -14,6 +15,7 @@ export class PrismaOrganizationCreationRepository implements OrganizationCreatio
   async createWithOwner(
     organization: Organization,
     ownerMembership: OrganizationMembership,
+    auditEvent: AuditEvent,
   ): Promise<void> {
     await this.prisma.$transaction(async (transaction) => {
       await transaction.organization.create({
@@ -22,6 +24,7 @@ export class PrismaOrganizationCreationRepository implements OrganizationCreatio
       await transaction.membership.create({
         data: PrismaMembershipMapper.toPersistence(ownerMembership),
       })
+      await transaction.auditEvent.create({ data: auditEvent.toPrimitives() })
     })
   }
 }

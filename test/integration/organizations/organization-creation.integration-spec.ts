@@ -1,6 +1,7 @@
 import type { TestingModule } from '@nestjs/testing'
 import { Test } from '@nestjs/testing'
 
+import { AuditEvent } from '../../../src/audit/domain/audit-event'
 import {
   ORGANIZATION_CREATION_REPOSITORY,
   type OrganizationCreationRepository,
@@ -131,18 +132,29 @@ describe('organization creation persistence', () => {
       role: 'owner',
       isActive: true,
     })
+    await expect(
+      prisma.auditEvent.findFirstOrThrow({
+        where: {
+          organizationId: result.id,
+          action: 'organization.created',
+          targetId: result.id,
+        },
+      }),
+    ).resolves.toMatchObject({ actorUserId: USER_ID, metadata: {} })
   })
 
   it('rolls organization creation back when owner membership persistence fails', async () => {
     await creationRepository.createWithOwner(
       restoreOrganization(ORGANIZATION_ID, 'Existing Company'),
       restoreOwner(MEMBERSHIP_ID, ORGANIZATION_ID),
+      createOrganizationAudit('00000000-0000-4000-8000-000000001111', ORGANIZATION_ID),
     )
 
     await expect(
       creationRepository.createWithOwner(
         restoreOrganization(ROLLBACK_ORGANIZATION_ID, 'Rolled Back Company'),
         restoreOwner(MEMBERSHIP_ID, ROLLBACK_ORGANIZATION_ID),
+        createOrganizationAudit('00000000-0000-4000-8000-000000001112', ROLLBACK_ORGANIZATION_ID),
       ),
     ).rejects.toThrow()
 
@@ -151,6 +163,11 @@ describe('organization creation persistence', () => {
     ).resolves.toBeNull()
     await expect(prisma.organization.count()).resolves.toBe(1)
     await expect(prisma.membership.count()).resolves.toBe(1)
+    await expect(
+      prisma.auditEvent.findUnique({
+        where: { id: '00000000-0000-4000-8000-000000001112' },
+      }),
+    ).resolves.toBeNull()
   })
 
   function restoreOrganization(id: string, name: string): Organization {
@@ -172,6 +189,18 @@ describe('organization creation persistence', () => {
       isActive: true,
       createdAt: NOW,
       updatedAt: NOW,
+    })
+  }
+
+  function createOrganizationAudit(id: string, organizationId: string): AuditEvent {
+    return AuditEvent.create({
+      id,
+      actorUserId: USER_ID,
+      organizationId,
+      action: 'organization.created',
+      targetType: 'organization',
+      targetId: organizationId,
+      occurredAt: NOW,
     })
   }
 })

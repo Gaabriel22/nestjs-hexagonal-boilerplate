@@ -7,6 +7,7 @@ import { InvalidOrganizationNameError } from '../../../src/organizations/domain/
 const USER_ID = '00000000-0000-4000-8000-000000001001'
 const ORGANIZATION_ID = '00000000-0000-4000-8000-000000001002'
 const MEMBERSHIP_ID = '00000000-0000-4000-8000-000000001003'
+const AUDIT_EVENT_ID = '00000000-0000-4000-8000-000000001004'
 const NOW = new Date('2026-01-01T10:00:00.000Z')
 
 describe('organization domain', () => {
@@ -47,7 +48,7 @@ describe('organization domain', () => {
 describe('CreateOrganization', () => {
   it('persists organization and owner through one atomic repository operation', async () => {
     const repository = createRepository()
-    const identifiers = [ORGANIZATION_ID, MEMBERSHIP_ID]
+    const identifiers = [ORGANIZATION_ID, MEMBERSHIP_ID, AUDIT_EVENT_ID]
     const useCase = new CreateOrganization(
       repository,
       { generate: (): string => identifiers.shift() ?? 'unexpected-id' },
@@ -71,7 +72,8 @@ describe('CreateOrganization', () => {
         isActive: true,
       },
     })
-    const [organization, ownerMembership] = repository.createWithOwner.mock.calls[0] ?? []
+    const [organization, ownerMembership, auditEvent] =
+      repository.createWithOwner.mock.calls[0] ?? []
     expect(organization).toMatchObject({ id: ORGANIZATION_ID, name: 'Example Company' })
     expect(ownerMembership).toMatchObject({
       id: MEMBERSHIP_ID,
@@ -79,12 +81,20 @@ describe('CreateOrganization', () => {
       userId: USER_ID,
       role: 'owner',
     })
+    expect(auditEvent?.toPrimitives()).toMatchObject({
+      id: AUDIT_EVENT_ID,
+      actorUserId: USER_ID,
+      organizationId: ORGANIZATION_ID,
+      action: 'organization.created',
+      targetId: ORGANIZATION_ID,
+      metadata: {},
+    })
   })
 
   it('does not return success when atomic persistence fails', async () => {
     const repository = createRepository()
     repository.createWithOwner.mockRejectedValue(new Error('transaction failed'))
-    const identifiers = [ORGANIZATION_ID, MEMBERSHIP_ID]
+    const identifiers = [ORGANIZATION_ID, MEMBERSHIP_ID, AUDIT_EVENT_ID]
     const useCase = new CreateOrganization(
       repository,
       { generate: (): string => identifiers.shift() ?? 'unexpected-id' },

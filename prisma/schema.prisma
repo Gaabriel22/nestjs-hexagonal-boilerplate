@@ -99,3 +99,21 @@ model SessionRefreshToken {
   @@index([sessionId, usedAt], map: "session_refresh_tokens_session_id_used_at_idx")
   @@map("session_refresh_tokens")
 }
+
+model AuditEvent {
+  id                String   @id @db.Uuid
+  actorUserId       String   @map("actor_user_id") @db.Uuid
+  organizationId    String?  @map("organization_id") @db.Uuid
+  action            String   @db.VarChar(100)
+  targetType        String   @map("target_type") @db.VarChar(50)
+  targetId          String   @map("target_id") @db.Uuid
+  requestIdentifier String?  @map("request_identifier") @db.VarChar(128)
+  metadata          Json     @default("{}") @db.JsonB
+  occurredAt        DateTime @map("occurred_at") @db.Timestamptz
+
+  @@index([organizationId, occurredAt, id], map: "audit_events_organization_id_occurred_at_id_idx")
+  @@index([actorUserId, occurredAt], map: "audit_events_actor_user_id_occurred_at_idx")
+  @@index([action, occurredAt], map: "audit_events_action_occurred_at_idx")
+  @@index([targetType, targetId], map: "audit_events_target_type_target_id_idx")
+  @@map("audit_events")
+}

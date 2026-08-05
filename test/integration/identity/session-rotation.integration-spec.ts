@@ -45,6 +45,7 @@ describe('session refresh rotation', () => {
       replacementTokenHash: 'replacement-token-hash',
       replacementExpiresAt: EXPIRES_AT,
       currentTime: NOW,
+      audit: { eventId: '00000000-0000-4000-8000-000000000511' },
     })
 
     expect(result).toEqual({ outcome: 'rotated', userId: USER_ID, sessionId: SESSION_ID })
@@ -66,6 +67,16 @@ describe('session refresh rotation', () => {
         where: { tokenHash: 'replacement-token-hash' },
       }),
     ).resolves.toMatchObject({ usedAt: null })
+    await expect(
+      prisma.auditEvent.findUniqueOrThrow({
+        where: { id: '00000000-0000-4000-8000-000000000511' },
+      }),
+    ).resolves.toMatchObject({
+      actorUserId: USER_ID,
+      action: 'identity.refresh_rotated',
+      targetId: SESSION_ID,
+      metadata: {},
+    })
   })
 
   it('allows one concurrent rotation then detects reuse and revokes the session', async () => {
@@ -75,12 +86,14 @@ describe('session refresh rotation', () => {
         replacementTokenHash: 'replacement-token-hash-a',
         replacementExpiresAt: EXPIRES_AT,
         currentTime: NOW,
+        audit: { eventId: '00000000-0000-4000-8000-000000000512' },
       }),
       repository.rotateRefreshToken({
         presentedTokenHash: 'initial-token-hash',
         replacementTokenHash: 'replacement-token-hash-b',
         replacementExpiresAt: EXPIRES_AT,
         currentTime: new Date(NOW.getTime() + 1),
+        audit: { eventId: '00000000-0000-4000-8000-000000000513' },
       }),
     ])
 
@@ -94,6 +107,15 @@ describe('session refresh rotation', () => {
         },
       }),
     ).resolves.toBe(1)
+    await expect(
+      prisma.auditEvent.count({
+        where: {
+          id: {
+            in: ['00000000-0000-4000-8000-000000000512', '00000000-0000-4000-8000-000000000513'],
+          },
+        },
+      }),
+    ).resolves.toBe(2)
   })
 
   async function seedSession(tokenHash: string): Promise<void> {

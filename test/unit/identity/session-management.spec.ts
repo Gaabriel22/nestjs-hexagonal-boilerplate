@@ -7,10 +7,12 @@ import { LogoutCurrentSession } from '../../../src/identity/application/use-case
 import { RefreshSession } from '../../../src/identity/application/use-cases/refresh-session'
 import { RevokeOwnedSession } from '../../../src/identity/application/use-cases/revoke-owned-session'
 import type { Clock } from '../../../src/shared/application/ports/clock'
+import type { IdentifierGenerator } from '../../../src/shared/application/ports/identifier-generator'
 
 const USER_ID = '00000000-0000-4000-8000-000000000401'
 const SESSION_ID = '00000000-0000-4000-8000-000000000402'
 const OTHER_SESSION_ID = '00000000-0000-4000-8000-000000000403'
+const AUDIT_EVENT_ID = '00000000-0000-4000-8000-000000000404'
 const NOW = new Date('2026-01-01T10:00:00.000Z')
 const EXPIRES_AT = new Date('2026-02-01T10:00:00.000Z')
 
@@ -42,9 +44,15 @@ describe('RefreshSession', () => {
       }),
       hash: jest.fn().mockReturnValue('old-refresh-hash'),
     }
-    useCase = new RefreshSession(repository, accessTokens, refreshTokens, {
-      now: (): Date => NOW,
-    })
+    useCase = new RefreshSession(
+      repository,
+      accessTokens,
+      refreshTokens,
+      {
+        now: (): Date => NOW,
+      },
+      { generate: (): string => AUDIT_EVENT_ID },
+    )
   })
 
   it('rotates the opaque token and issues minimal access claims', async () => {
@@ -57,6 +65,7 @@ describe('RefreshSession', () => {
           replacementTokenHash: 'new-refresh-hash',
           replacementExpiresAt: EXPIRES_AT,
           currentTime: NOW,
+          audit: { eventId: AUDIT_EVENT_ID },
         },
       ],
     ])
@@ -82,18 +91,35 @@ describe('RefreshSession', () => {
 
 describe('Session management use cases', () => {
   const clock: Clock = { now: (): Date => NOW }
+  const identifiers: IdentifierGenerator = { generate: (): string => AUDIT_EVENT_ID }
 
   it('revokes current and selected sessions only through owned-session scope', async () => {
     const repository = createRepository()
-    const logout = new LogoutCurrentSession(repository, clock)
-    const revoke = new RevokeOwnedSession(repository, clock)
+    const logout = new LogoutCurrentSession(repository, clock, identifiers)
+    const revoke = new RevokeOwnedSession(repository, clock, identifiers)
 
     await logout.execute(USER_ID, SESSION_ID)
     await revoke.execute(USER_ID, OTHER_SESSION_ID)
 
     expect(repository.revokeOwnedSession.mock.calls).toEqual([
-      [USER_ID, SESSION_ID, NOW],
-      [USER_ID, OTHER_SESSION_ID, NOW],
+      [
+        {
+          userId: USER_ID,
+          sessionId: SESSION_ID,
+          currentTime: NOW,
+          reason: 'logout',
+          audit: { eventId: AUDIT_EVENT_ID },
+        },
+      ],
+      [
+        {
+          userId: USER_ID,
+          sessionId: OTHER_SESSION_ID,
+          currentTime: NOW,
+          reason: 'user_revocation',
+          audit: { eventId: AUDIT_EVENT_ID },
+        },
+      ],
     ])
   })
 

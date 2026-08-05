@@ -1,9 +1,11 @@
 import { Injectable } from '@nestjs/common'
 
+import { AuditEvent } from '../../../../../audit/domain/audit-event'
 import type {
   ActiveSessionView,
   RotateRefreshTokenInput,
   RotateRefreshTokenResult,
+  RevokeOwnedSessionInput,
   SessionManagementRepository,
 } from '../../../../application/ports/session-management.repository'
 import { PrismaService } from '../../../../../shared/infrastructure/database/prisma.service'
@@ -27,6 +29,17 @@ export class PrismaSessionManagementRepository implements SessionManagementRepos
         await transaction.session.updateMany({
           where: { id: token.sessionId, revokedAt: null },
           data: { revokedAt: input.currentTime },
+        })
+        await transaction.auditEvent.create({
+          data: AuditEvent.create({
+            id: input.audit.eventId,
+            actorUserId: token.session.userId,
+            action: 'identity.refresh_reuse_detected',
+            targetType: 'session',
+            targetId: token.sessionId,
+            requestIdentifier: input.audit.requestIdentifier,
+            occurredAt: input.currentTime,
+          }).toPrimitives(),
         })
 
         return { outcome: 'reused' }
@@ -66,6 +79,17 @@ export class PrismaSessionManagementRepository implements SessionManagementRepos
             where: { id: token.sessionId, revokedAt: null },
             data: { revokedAt: input.currentTime },
           })
+          await transaction.auditEvent.create({
+            data: AuditEvent.create({
+              id: input.audit.eventId,
+              actorUserId: token.session.userId,
+              action: 'identity.refresh_reuse_detected',
+              targetType: 'session',
+              targetId: token.sessionId,
+              requestIdentifier: input.audit.requestIdentifier,
+              occurredAt: input.currentTime,
+            }).toPrimitives(),
+          })
 
           return { outcome: 'reused' }
         }
@@ -83,6 +107,17 @@ export class PrismaSessionManagementRepository implements SessionManagementRepos
           where: { id: token.sessionId, revokedAt: null },
           data: { revokedAt: input.currentTime },
         })
+        await transaction.auditEvent.create({
+          data: AuditEvent.create({
+            id: input.audit.eventId,
+            actorUserId: token.session.userId,
+            action: 'identity.refresh_reuse_detected',
+            targetType: 'session',
+            targetId: token.sessionId,
+            requestIdentifier: input.audit.requestIdentifier,
+            occurredAt: input.currentTime,
+          }).toPrimitives(),
+        })
 
         return { outcome: 'reused' }
       }
@@ -94,6 +129,17 @@ export class PrismaSessionManagementRepository implements SessionManagementRepos
           issuedAt: input.currentTime,
         },
       })
+      await transaction.auditEvent.create({
+        data: AuditEvent.create({
+          id: input.audit.eventId,
+          actorUserId: token.session.userId,
+          action: 'identity.refresh_rotated',
+          targetType: 'session',
+          targetId: token.sessionId,
+          requestIdentifier: input.audit.requestIdentifier,
+          occurredAt: input.currentTime,
+        }).toPrimitives(),
+      })
 
       return {
         outcome: 'rotated',
@@ -103,10 +149,27 @@ export class PrismaSessionManagementRepository implements SessionManagementRepos
     })
   }
 
-  async revokeOwnedSession(userId: string, sessionId: string, currentTime: Date): Promise<void> {
-    await this.prisma.session.updateMany({
-      where: { id: sessionId, userId, revokedAt: null },
-      data: { revokedAt: currentTime },
+  async revokeOwnedSession(input: RevokeOwnedSessionInput): Promise<void> {
+    await this.prisma.$transaction(async (transaction) => {
+      const revoked = await transaction.session.updateMany({
+        where: { id: input.sessionId, userId: input.userId, revokedAt: null },
+        data: { revokedAt: input.currentTime },
+      })
+
+      if (revoked.count === 1) {
+        await transaction.auditEvent.create({
+          data: AuditEvent.create({
+            id: input.audit.eventId,
+            actorUserId: input.userId,
+            action: 'identity.session_revoked',
+            targetType: 'session',
+            targetId: input.sessionId,
+            requestIdentifier: input.audit.requestIdentifier,
+            metadata: { reason: input.reason },
+            occurredAt: input.currentTime,
+          }).toPrimitives(),
+        })
+      }
     })
   }
 

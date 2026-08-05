@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common'
 
+import type { AuditEvent } from '../../../../../audit/domain/audit-event'
 import type {
   ActiveIdentity,
   AuthenticationRepository,
@@ -31,7 +32,7 @@ export class PrismaAuthenticationRepository implements AuthenticationRepository 
     }
   }
 
-  async createSession(session: IdentitySession): Promise<void> {
+  async createSession(session: IdentitySession, auditEvent: AuditEvent): Promise<void> {
     await this.prisma.$transaction(async (transaction) => {
       await transaction.session.create({ data: PrismaSessionMapper.toPersistence(session) })
       await transaction.sessionRefreshToken.create({
@@ -41,6 +42,7 @@ export class PrismaAuthenticationRepository implements AuthenticationRepository 
           issuedAt: session.createdAt,
         },
       })
+      await transaction.auditEvent.create({ data: auditEvent.toPrimitives() })
     })
   }
 

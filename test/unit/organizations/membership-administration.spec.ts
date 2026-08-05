@@ -9,6 +9,7 @@ import { RemoveOrganizationMembership } from '../../../src/organizations/applica
 const USER_ID = '00000000-0000-4000-8000-000000001501'
 const ORGANIZATION_ID = '00000000-0000-4000-8000-000000001502'
 const MEMBERSHIP_ID = '00000000-0000-4000-8000-000000001503'
+const AUDIT_EVENT_ID = '00000000-0000-4000-8000-000000001504'
 const NOW = new Date('2026-01-01T10:00:00.000Z')
 
 describe('ChangeOrganizationMembershipRole', () => {
@@ -25,7 +26,11 @@ describe('ChangeOrganizationMembershipRole', () => {
         updatedAt: NOW,
       },
     })
-    const useCase = new ChangeOrganizationMembershipRole(repository, { now: (): Date => NOW })
+    const useCase = new ChangeOrganizationMembershipRole(
+      repository,
+      { now: (): Date => NOW },
+      { generate: (): string => AUDIT_EVENT_ID },
+    )
 
     const result = await useCase.execute({
       organizationId: ORGANIZATION_ID,
@@ -42,6 +47,7 @@ describe('ChangeOrganizationMembershipRole', () => {
           membershipId: MEMBERSHIP_ID,
           role: 'admin',
           currentTime: NOW,
+          audit: { eventId: AUDIT_EVENT_ID },
         },
       ],
     ])
@@ -55,7 +61,11 @@ describe('ChangeOrganizationMembershipRole', () => {
   ] as const)('maps %s outcome to stable error', async (outcome, errorType) => {
     const repository = createRepository()
     repository.changeRole.mockResolvedValue({ outcome })
-    const useCase = new ChangeOrganizationMembershipRole(repository, { now: (): Date => NOW })
+    const useCase = new ChangeOrganizationMembershipRole(
+      repository,
+      { now: (): Date => NOW },
+      { generate: (): string => AUDIT_EVENT_ID },
+    )
 
     await expect(
       useCase.execute({
@@ -72,7 +82,11 @@ describe('RemoveOrganizationMembership', () => {
   it('removes membership with current actor, tenant, and time', async () => {
     const repository = createRepository()
     repository.remove.mockResolvedValue({ outcome: 'removed' })
-    const useCase = new RemoveOrganizationMembership(repository, { now: (): Date => NOW })
+    const useCase = new RemoveOrganizationMembership(
+      repository,
+      { now: (): Date => NOW },
+      { generate: (): string => AUDIT_EVENT_ID },
+    )
 
     await useCase.execute({
       organizationId: ORGANIZATION_ID,
@@ -87,6 +101,7 @@ describe('RemoveOrganizationMembership', () => {
           actorUserId: USER_ID,
           membershipId: MEMBERSHIP_ID,
           currentTime: NOW,
+          audit: { eventId: AUDIT_EVENT_ID },
         },
       ],
     ])
@@ -99,7 +114,11 @@ describe('RemoveOrganizationMembership', () => {
   ] as const)('maps %s outcome to stable error', async (outcome, errorType) => {
     const repository = createRepository()
     repository.remove.mockResolvedValue({ outcome })
-    const useCase = new RemoveOrganizationMembership(repository, { now: (): Date => NOW })
+    const useCase = new RemoveOrganizationMembership(
+      repository,
+      { now: (): Date => NOW },
+      { generate: (): string => AUDIT_EVENT_ID },
+    )
 
     await expect(
       useCase.execute({

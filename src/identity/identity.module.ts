@@ -170,19 +170,30 @@ import { JwtAccessTokenService } from './infrastructure/security/jwt-access-toke
     },
     {
       provide: RefreshSession,
-      inject: [SESSION_MANAGEMENT_REPOSITORY, ACCESS_TOKEN_SERVICE, REFRESH_TOKEN_SERVICE, CLOCK],
+      inject: [
+        SESSION_MANAGEMENT_REPOSITORY,
+        ACCESS_TOKEN_SERVICE,
+        REFRESH_TOKEN_SERVICE,
+        CLOCK,
+        IDENTIFIER_GENERATOR,
+      ],
       useFactory: (
         repository: SessionManagementRepository,
         accessTokens: AccessTokenService,
         refreshTokens: RefreshTokenService,
         clock: Clock,
-      ): RefreshSession => new RefreshSession(repository, accessTokens, refreshTokens, clock),
+        identifiers: IdentifierGenerator,
+      ): RefreshSession =>
+        new RefreshSession(repository, accessTokens, refreshTokens, clock, identifiers),
     },
     {
       provide: LogoutCurrentSession,
-      inject: [SESSION_MANAGEMENT_REPOSITORY, CLOCK],
-      useFactory: (repository: SessionManagementRepository, clock: Clock): LogoutCurrentSession =>
-        new LogoutCurrentSession(repository, clock),
+      inject: [SESSION_MANAGEMENT_REPOSITORY, CLOCK, IDENTIFIER_GENERATOR],
+      useFactory: (
+        repository: SessionManagementRepository,
+        clock: Clock,
+        identifiers: IdentifierGenerator,
+      ): LogoutCurrentSession => new LogoutCurrentSession(repository, clock, identifiers),
     },
     {
       provide: ListActiveSessions,
@@ -192,9 +203,12 @@ import { JwtAccessTokenService } from './infrastructure/security/jwt-access-toke
     },
     {
       provide: RevokeOwnedSession,
-      inject: [SESSION_MANAGEMENT_REPOSITORY, CLOCK],
-      useFactory: (repository: SessionManagementRepository, clock: Clock): RevokeOwnedSession =>
-        new RevokeOwnedSession(repository, clock),
+      inject: [SESSION_MANAGEMENT_REPOSITORY, CLOCK, IDENTIFIER_GENERATOR],
+      useFactory: (
+        repository: SessionManagementRepository,
+        clock: Clock,
+        identifiers: IdentifierGenerator,
+      ): RevokeOwnedSession => new RevokeOwnedSession(repository, clock, identifiers),
     },
   ],
   exports: [

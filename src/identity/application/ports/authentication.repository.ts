@@ -1,3 +1,4 @@
+import type { AuditEvent } from '../../../audit/domain/audit-event'
 import type { IdentitySession } from '../../domain/entities/identity-session'
 
 export const AUTHENTICATION_REPOSITORY = Symbol('AUTHENTICATION_REPOSITORY')
@@ -16,7 +17,7 @@ export interface ActiveIdentity {
 
 export interface AuthenticationRepository {
   findCredentialIdentity(normalizedEmail: string): Promise<CredentialIdentity | null>
-  createSession(session: IdentitySession): Promise<void>
+  createSession(session: IdentitySession, auditEvent: AuditEvent): Promise<void>
   findActiveIdentity(
     userId: string,
     sessionId: string,

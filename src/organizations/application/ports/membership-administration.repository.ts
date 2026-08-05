@@ -1,3 +1,4 @@
+import type { AuditContext } from '../../../audit/application/audit-context'
 import type { ActiveOrganizationMembershipView } from './organization-access.repository'
 
 export const MEMBERSHIP_ADMINISTRATION_REPOSITORY = Symbol('MEMBERSHIP_ADMINISTRATION_REPOSITORY')
@@ -10,6 +11,7 @@ export interface ChangeMembershipRoleInput {
   readonly membershipId: string
   readonly role: AssignableMembershipRole
   readonly currentTime: Date
+  readonly audit: AuditContext
 }
 
 export type ChangeMembershipRoleResult =
@@ -23,6 +25,7 @@ export interface RemoveMembershipInput {
   readonly actorUserId: string
   readonly membershipId: string
   readonly currentTime: Date
+  readonly audit: AuditContext
 }
 
 export type RemoveMembershipResult =

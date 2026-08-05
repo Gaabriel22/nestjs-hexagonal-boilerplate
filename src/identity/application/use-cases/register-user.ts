@@ -1,3 +1,4 @@
+import { AuditEvent } from '../../../audit/domain/audit-event'
 import type { Clock } from '../../../shared/application/ports/clock'
 import type { IdentifierGenerator } from '../../../shared/application/ports/identifier-generator'
 import { Credential } from '../../domain/entities/credential'
@@ -45,6 +46,14 @@ export class RegisterUser {
     const persistenceResult = await this.registrationRepository.createUserWithCredential(
       user,
       credential,
+      AuditEvent.create({
+        id: this.identifierGenerator.generate(),
+        actorUserId: user.id,
+        action: 'identity.user_registered',
+        targetType: 'user',
+        targetId: user.id,
+        occurredAt: currentTime,
+      }),
     )
 
     if (persistenceResult === 'email_conflict') {

@@ -1,3 +1,4 @@
+import { AuditEvent } from '../../../audit/domain/audit-event'
 import type { Clock } from '../../../shared/application/ports/clock'
 import type { IdentifierGenerator } from '../../../shared/application/ports/identifier-generator'
 import { IdentitySession } from '../../domain/entities/identity-session'
@@ -48,13 +49,23 @@ export class Login {
     const refreshToken = this.refreshTokens.issue(currentTime)
     const accessToken = await this.accessTokens.issue({ userId: identity.userId, sessionId })
 
+    const session = IdentitySession.create({
+      id: sessionId,
+      userId: identity.userId,
+      refreshTokenHash: refreshToken.tokenHash,
+      expiresAt: refreshToken.expiresAt,
+      currentTime,
+    })
+
     await this.repository.createSession(
-      IdentitySession.create({
-        id: sessionId,
-        userId: identity.userId,
-        refreshTokenHash: refreshToken.tokenHash,
-        expiresAt: refreshToken.expiresAt,
-        currentTime,
+      session,
+      AuditEvent.create({
+        id: this.identifiers.generate(),
+        actorUserId: identity.userId,
+        action: 'identity.session_created',
+        targetType: 'session',
+        targetId: session.id,
+        occurredAt: currentTime,
       }),
     )
 

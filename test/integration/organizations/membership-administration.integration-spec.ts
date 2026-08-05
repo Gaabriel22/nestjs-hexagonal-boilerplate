@@ -85,6 +85,13 @@ describe('membership administration persistence', () => {
   })
 
   it('changes supported non-owner roles and persists the current result', async () => {
+    const auditCountBefore = await prisma.auditEvent.count({
+      where: {
+        organizationId: ORGANIZATION_ID,
+        action: 'organization.membership_role_changed',
+        targetId: MEMBER_MEMBERSHIP_ID,
+      },
+    })
     const result = await changeRole.execute({
       organizationId: ORGANIZATION_ID,
       actorUserId: OWNER_ID,
@@ -96,6 +103,32 @@ describe('membership administration persistence', () => {
     await expect(
       prisma.membership.findUniqueOrThrow({ where: { id: MEMBER_MEMBERSHIP_ID } }),
     ).resolves.toMatchObject({ role: 'admin', isActive: true })
+    await expect(
+      prisma.auditEvent.findMany({
+        where: {
+          organizationId: ORGANIZATION_ID,
+          action: 'organization.membership_role_changed',
+          targetId: MEMBER_MEMBERSHIP_ID,
+        },
+        orderBy: { occurredAt: 'desc' },
+      }),
+    ).resolves.toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          actorUserId: OWNER_ID,
+          metadata: { previousRole: 'member', role: 'admin' },
+        }),
+      ]),
+    )
+    await expect(
+      prisma.auditEvent.count({
+        where: {
+          organizationId: ORGANIZATION_ID,
+          action: 'organization.membership_role_changed',
+          targetId: MEMBER_MEMBERSHIP_ID,
+        },
+      }),
+    ).resolves.toBe(auditCountBefore + 1)
   })
 
   it('rejects stale actor permission after persisted role changes', async () => {
@@ -129,6 +162,13 @@ describe('membership administration persistence', () => {
   })
 
   it('removes a non-owner membership and revokes access immediately', async () => {
+    const auditCountBefore = await prisma.auditEvent.count({
+      where: {
+        organizationId: ORGANIZATION_ID,
+        action: 'organization.membership_removed',
+        targetId: MEMBER_MEMBERSHIP_ID,
+      },
+    })
     await removeMembership.execute({
       organizationId: ORGANIZATION_ID,
       actorUserId: ADMIN_ID,
@@ -143,6 +183,15 @@ describe('membership administration persistence', () => {
       limit: 20,
     })
     expect(page.memberships.map(({ id }) => id)).not.toContain(MEMBER_MEMBERSHIP_ID)
+    await expect(
+      prisma.auditEvent.count({
+        where: {
+          organizationId: ORGANIZATION_ID,
+          action: 'organization.membership_removed',
+          targetId: MEMBER_MEMBERSHIP_ID,
+        },
+      }),
+    ).resolves.toBe(auditCountBefore + 1)
   })
 
   it('allows an owner to remove another owner while one remains', async () => {
@@ -167,6 +216,13 @@ describe('membership administration persistence', () => {
       where: { id: SECOND_OWNER_MEMBERSHIP_ID },
       data: { isActive: false },
     })
+    const auditCountBefore = await prisma.auditEvent.count({
+      where: {
+        organizationId: ORGANIZATION_ID,
+        action: 'organization.membership_removed',
+        targetId: OWNER_MEMBERSHIP_ID,
+      },
+    })
 
     await expect(
       removeMembership.execute({
@@ -178,6 +234,15 @@ describe('membership administration persistence', () => {
     await expect(
       prisma.membership.findUniqueOrThrow({ where: { id: OWNER_MEMBERSHIP_ID } }),
     ).resolves.toMatchObject({ isActive: true })
+    await expect(
+      prisma.auditEvent.count({
+        where: {
+          organizationId: ORGANIZATION_ID,
+          action: 'organization.membership_removed',
+          targetId: OWNER_MEMBERSHIP_ID,
+        },
+      }),
+    ).resolves.toBe(auditCountBefore)
   })
 
   it('preserves an active owner under concurrent cross-removal attempts', async () => {

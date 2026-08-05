@@ -130,17 +130,17 @@
 - [x] 13.5 Add unit tests covering every role-to-permission mapping and inactive membership
 - [x] 13.6 Add integration and end-to-end tests proving unrelated and cross-tenant identifiers cannot expose data
 - [x] 13.7 Run `npm run format:check`, `npm run lint`, `npm run typecheck`, architecture tests, affected tests, and `npm run build`
-- [ ] 13.8 Commit the verified slice with message `feat: enforce organization access control`
+- [x] 13.8 Commit the verified slice with message `feat: enforce organization access control`
 
 ## 14. Membership Administration
 
-- [ ] 14.1 Implement supported non-owner membership role changes with permission enforcement
-- [ ] 14.2 Implement membership removal and immediate access loss
-- [ ] 14.3 Enforce the invariant that every organization retains an active owner
-- [ ] 14.4 Add role-change and membership-removal HTTP routes with stable errors
-- [ ] 14.5 Add unit and integration tests for valid changes, forbidden changes, stale roles, and last-owner protection
-- [ ] 14.6 Add end-to-end tests for administration success, HTTP 403 failures, and immediate authorization changes
-- [ ] 14.7 Run `npm run format:check`, `npm run lint`, `npm run typecheck`, affected tests, and `npm run build`
+- [x] 14.1 Implement supported non-owner membership role changes with permission enforcement
+- [x] 14.2 Implement membership removal and immediate access loss
+- [x] 14.3 Enforce the invariant that every organization retains an active owner
+- [x] 14.4 Add role-change and membership-removal HTTP routes with stable errors
+- [x] 14.5 Add unit and integration tests for valid changes, forbidden changes, stale roles, and last-owner protection
+- [x] 14.6 Add end-to-end tests for administration success, HTTP 403 failures, and immediate authorization changes
+- [x] 14.7 Run `npm run format:check`, `npm run lint`, `npm run typecheck`, affected tests, and `npm run build`
 - [ ] 14.8 Commit the verified slice with message `feat: add membership administration`
 
 ## 15. Audit Persistence and Recording

@@ -9,6 +9,10 @@ import {
 import { CryptoIdentifierGenerator } from '../shared/infrastructure/system/crypto-identifier-generator'
 import { SystemClock } from '../shared/infrastructure/system/system-clock'
 import {
+  MEMBERSHIP_ADMINISTRATION_REPOSITORY,
+  type MembershipAdministrationRepository,
+} from './application/ports/membership-administration.repository'
+import {
   ORGANIZATION_CREATION_REPOSITORY,
   type OrganizationCreationRepository,
 } from './application/ports/organization-creation.repository'
@@ -16,8 +20,10 @@ import {
   ORGANIZATION_ACCESS_REPOSITORY,
   type OrganizationAccessRepository,
 } from './application/ports/organization-access.repository'
+import { ChangeOrganizationMembershipRole } from './application/use-cases/change-organization-membership-role'
 import { CreateOrganization } from './application/use-cases/create-organization'
 import { ListOrganizationMemberships } from './application/use-cases/list-organization-memberships'
+import { RemoveOrganizationMembership } from './application/use-cases/remove-organization-membership'
 import { MEMBERSHIP_REPOSITORY } from './domain/repositories/membership.repository'
 import { ORGANIZATION_REPOSITORY } from './domain/repositories/organization.repository'
 import { OrganizationsController } from './infrastructure/http/organizations.controller'
@@ -39,6 +45,7 @@ import { PrismaOrganizationRepository } from './infrastructure/persistence/prism
     { provide: ORGANIZATION_REPOSITORY, useExisting: PrismaOrganizationRepository },
     { provide: MEMBERSHIP_REPOSITORY, useExisting: PrismaMembershipRepository },
     { provide: ORGANIZATION_ACCESS_REPOSITORY, useExisting: PrismaMembershipRepository },
+    { provide: MEMBERSHIP_ADMINISTRATION_REPOSITORY, useExisting: PrismaMembershipRepository },
     {
       provide: ORGANIZATION_CREATION_REPOSITORY,
       useExisting: PrismaOrganizationCreationRepository,
@@ -60,7 +67,29 @@ import { PrismaOrganizationRepository } from './infrastructure/persistence/prism
       useFactory: (repository: OrganizationAccessRepository): ListOrganizationMemberships =>
         new ListOrganizationMemberships(repository),
     },
+    {
+      provide: ChangeOrganizationMembershipRole,
+      inject: [MEMBERSHIP_ADMINISTRATION_REPOSITORY, CLOCK],
+      useFactory: (
+        repository: MembershipAdministrationRepository,
+        clock: Clock,
+      ): ChangeOrganizationMembershipRole =>
+        new ChangeOrganizationMembershipRole(repository, clock),
+    },
+    {
+      provide: RemoveOrganizationMembership,
+      inject: [MEMBERSHIP_ADMINISTRATION_REPOSITORY, CLOCK],
+      useFactory: (
+        repository: MembershipAdministrationRepository,
+        clock: Clock,
+      ): RemoveOrganizationMembership => new RemoveOrganizationMembership(repository, clock),
+    },
   ],
-  exports: [ORGANIZATION_REPOSITORY, MEMBERSHIP_REPOSITORY, ORGANIZATION_ACCESS_REPOSITORY],
+  exports: [
+    ORGANIZATION_REPOSITORY,
+    MEMBERSHIP_REPOSITORY,
+    ORGANIZATION_ACCESS_REPOSITORY,
+    MEMBERSHIP_ADMINISTRATION_REPOSITORY,
+  ],
 })
 export class OrganizationsModule {}

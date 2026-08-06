@@ -4,17 +4,20 @@ import { FastifyAdapter, type NestFastifyApplication } from '@nestjs/platform-fa
 
 import { AppModule } from './app.module'
 import { applicationConfig } from './shared/infrastructure/config/application-config'
+import type { ApplicationConfig } from './shared/infrastructure/config/environment.schema'
+import { configureApiDocumentation } from './shared/infrastructure/http/configure-api-documentation'
 import { ProblemDetailsFilter } from './shared/infrastructure/http/problem-details.filter'
 import { configureHttpPlatform } from './shared/infrastructure/http/configure-http-platform'
 import { createValidationException } from './shared/infrastructure/http/request-validation'
 
 export async function createApplication(
   rootModule: Type = AppModule,
+  config: ApplicationConfig = applicationConfig,
 ): Promise<NestFastifyApplication> {
   const application = await NestFactory.create<NestFastifyApplication>(
     rootModule,
     new FastifyAdapter({
-      bodyLimit: applicationConfig.http.bodyLimitBytes,
+      bodyLimit: config.http.bodyLimitBytes,
     }),
   )
 
@@ -41,7 +44,8 @@ export async function createApplication(
     }),
   )
   application.useGlobalFilters(new ProblemDetailsFilter())
-  await configureHttpPlatform(application, applicationConfig)
+  await configureHttpPlatform(application, config)
+  await configureApiDocumentation(application, config)
 
   return application
 }

@@ -3,12 +3,22 @@ import type {
   ActiveOrganizationMembershipView,
 } from '../../../application/ports/organization-access.repository'
 import type { MembershipRole } from '../../../domain/entities/organization-membership'
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger'
 
 export class OrganizationMembershipResponse {
+  @ApiProperty({ format: 'uuid' })
   readonly id: string
+
+  @ApiProperty({ format: 'uuid' })
   readonly userId: string
+
+  @ApiProperty({ enum: ['owner', 'admin', 'member'] })
   readonly role: MembershipRole
+
+  @ApiProperty({ format: 'date-time' })
   readonly createdAt: string
+
+  @ApiProperty({ format: 'date-time' })
   readonly updatedAt: string
 
   constructor(membership: ActiveOrganizationMembershipView) {
@@ -21,7 +31,10 @@ export class OrganizationMembershipResponse {
 }
 
 export class MembershipListResponse {
+  @ApiProperty({ type: () => [OrganizationMembershipResponse] })
   readonly memberships: OrganizationMembershipResponse[]
+
+  @ApiPropertyOptional({ format: 'uuid', nullable: true })
   readonly nextCursor: string | null
 
   constructor(page: ActiveOrganizationMembershipPage) {

@@ -161,16 +161,16 @@
 - [x] 16.4 Add unit and integration tests for pagination, filters, permission denial, and tenant isolation
 - [x] 16.5 Add end-to-end tests for authorized retrieval and unauthorized concealment
 - [x] 16.6 Run `npm run format:check`, `npm run lint`, `npm run typecheck`, affected tests, and `npm run build`
-- [ ] 16.7 Commit the verified slice with message `feat: add tenant audit queries`
+- [x] 16.7 Commit the verified slice with message `feat: add tenant audit queries`
 
 ## 17. OpenAPI and Scalar Reference
 
-- [ ] 17.1 Configure OpenAPI metadata, bearer authentication scheme, version information, tags, and raw document route
-- [ ] 17.2 Annotate public operations and DTOs with request, success, and standard Problem Details responses
-- [ ] 17.3 Mount Scalar API Reference with Fastify support against the generated OpenAPI route
-- [ ] 17.4 Add an OpenAPI generation test that validates required operations, schemas, and security declarations
-- [ ] 17.5 Add an end-to-end smoke test for the raw document and Scalar reference routes
-- [ ] 17.6 Run `npm run format:check`, `npm run lint`, `npm run typecheck`, OpenAPI tests, end-to-end tests, and `npm run build`
+- [x] 17.1 Configure OpenAPI metadata, bearer authentication scheme, version information, tags, and raw document route
+- [x] 17.2 Annotate public operations and DTOs with request, success, and standard Problem Details responses
+- [x] 17.3 Mount Scalar API Reference with Fastify support against the generated OpenAPI route
+- [x] 17.4 Add an OpenAPI generation test that validates required operations, schemas, and security declarations
+- [x] 17.5 Add an end-to-end smoke test for the raw document and Scalar reference routes
+- [x] 17.6 Run `npm run format:check`, `npm run lint`, `npm run typecheck`, OpenAPI tests, end-to-end tests, and `npm run build`
 - [ ] 17.7 Commit the verified slice with message `docs: add OpenAPI and Scalar reference`
 
 ## 18. Structured Logging and Correlation

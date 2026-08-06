@@ -2,6 +2,7 @@ const TEST_ENVIRONMENT = Object.freeze({
   NODE_ENV: 'test',
   AUTH_ACCESS_TOKEN_SECRET: 'test-access-token-secret-at-least-32-characters',
   AUTH_REFRESH_TOKEN_HASH_SECRET: 'test-refresh-token-secret-at-least-32-characters',
+  DOCS_ENABLED: 'false',
   HTTP_BODY_LIMIT_BYTES: '1024',
   RATE_LIMIT_MAX: '2',
 })

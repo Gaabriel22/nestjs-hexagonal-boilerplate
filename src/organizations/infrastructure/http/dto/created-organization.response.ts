@@ -1,12 +1,26 @@
 import type { CreateOrganizationResult } from '../../../application/use-cases/create-organization'
+import { ApiProperty } from '@nestjs/swagger'
 
 export class CreatedOwnerMembershipResponse {
+  @ApiProperty({ format: 'uuid' })
   readonly id: string
+
+  @ApiProperty({ format: 'uuid' })
   readonly organizationId: string
+
+  @ApiProperty({ format: 'uuid' })
   readonly userId: string
+
+  @ApiProperty({ enum: ['owner'] })
   readonly role: 'owner'
+
+  @ApiProperty({ example: true })
   readonly isActive: boolean
+
+  @ApiProperty({ format: 'date-time' })
   readonly createdAt: string
+
+  @ApiProperty({ format: 'date-time' })
   readonly updatedAt: string
 
   constructor(result: CreateOrganizationResult['ownerMembership']) {
@@ -21,11 +35,22 @@ export class CreatedOwnerMembershipResponse {
 }
 
 export class CreatedOrganizationResponse {
+  @ApiProperty({ format: 'uuid' })
   readonly id: string
+
+  @ApiProperty({ example: 'Acme Engineering' })
   readonly name: string
+
+  @ApiProperty({ example: true })
   readonly isActive: boolean
+
+  @ApiProperty({ format: 'date-time' })
   readonly createdAt: string
+
+  @ApiProperty({ format: 'date-time' })
   readonly updatedAt: string
+
+  @ApiProperty({ type: () => CreatedOwnerMembershipResponse })
   readonly ownerMembership: CreatedOwnerMembershipResponse
 
   constructor(result: CreateOrganizationResult) {

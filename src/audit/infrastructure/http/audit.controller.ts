@@ -1,21 +1,29 @@
 import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common'
+import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger'
 
 import { AccessAuthenticationGuard } from '../../../identity/infrastructure/http/access-authentication.guard'
 import { OrganizationIdParams } from '../../../organizations/infrastructure/http/dto/organization-id.params'
 import { OrganizationPermissionGuard } from '../../../organizations/infrastructure/http/organization-permission.guard'
 import { RequireOrganizationPermission } from '../../../organizations/infrastructure/http/require-organization-permission.decorator'
+import { OPENAPI_BEARER_SCHEME } from '../../../shared/infrastructure/http/configure-api-documentation'
+import { ApiStandardProblemResponses } from '../../../shared/infrastructure/http/openapi-problem-responses'
 import { ListOrganizationAuditEvents } from '../../application/use-cases/list-organization-audit-events'
 import { AuditEventListQuery } from './dto/audit-event-list.query'
 import { AuditEventListResponse } from './dto/audit-event-list.response'
 
 @Controller({ path: 'organizations', version: '1' })
 @UseGuards(AccessAuthenticationGuard)
+@ApiTags('Audit')
+@ApiBearerAuth(OPENAPI_BEARER_SCHEME)
 export class AuditController {
   constructor(private readonly listOrganizationAuditEvents: ListOrganizationAuditEvents) {}
 
   @Get(':organizationId/audit-events')
   @UseGuards(OrganizationPermissionGuard)
   @RequireOrganizationPermission('audit:read')
+  @ApiOperation({ summary: 'List tenant audit events with cursor pagination and filters' })
+  @ApiOkResponse({ description: 'Tenant-scoped audit events', type: AuditEventListResponse })
+  @ApiStandardProblemResponses({ unauthorized: true, forbidden: true })
   async list(
     @Param() params: OrganizationIdParams,
     @Query() query: AuditEventListQuery,

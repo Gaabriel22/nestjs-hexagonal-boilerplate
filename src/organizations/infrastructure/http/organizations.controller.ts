@@ -11,10 +11,20 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common'
+import {
+  ApiBearerAuth,
+  ApiCreatedResponse,
+  ApiNoContentResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger'
 
 import type { AccessTokenClaims } from '../../../identity/application/ports/access-token.service'
 import { AccessAuthenticationGuard } from '../../../identity/infrastructure/http/access-authentication.guard'
 import { CurrentIdentity } from '../../../identity/infrastructure/http/current-identity.decorator'
+import { OPENAPI_BEARER_SCHEME } from '../../../shared/infrastructure/http/configure-api-documentation'
+import { ApiStandardProblemResponses } from '../../../shared/infrastructure/http/openapi-problem-responses'
 import { CreateOrganization } from '../../application/use-cases/create-organization'
 import { ChangeOrganizationMembershipRole } from '../../application/use-cases/change-organization-membership-role'
 import { ListOrganizationMemberships } from '../../application/use-cases/list-organization-memberships'
@@ -34,6 +44,8 @@ import { RequireOrganizationPermission } from './require-organization-permission
 
 @Controller({ path: 'organizations', version: '1' })
 @UseGuards(AccessAuthenticationGuard)
+@ApiTags('Organizations')
+@ApiBearerAuth(OPENAPI_BEARER_SCHEME)
 export class OrganizationsController {
   constructor(
     private readonly createOrganization: CreateOrganization,
@@ -44,6 +56,9 @@ export class OrganizationsController {
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
+  @ApiOperation({ summary: 'Create an organization and its owner membership atomically' })
+  @ApiCreatedResponse({ description: 'Organization created', type: CreatedOrganizationResponse })
+  @ApiStandardProblemResponses({ unauthorized: true })
   async create(
     @CurrentIdentity() identity: AccessTokenClaims,
     @Body() input: CreateOrganizationDto,
@@ -59,6 +74,9 @@ export class OrganizationsController {
   @Get(':organizationId/memberships')
   @UseGuards(OrganizationPermissionGuard)
   @RequireOrganizationPermission('membership:read')
+  @ApiOperation({ summary: 'List active organization memberships' })
+  @ApiOkResponse({ description: 'Active organization memberships', type: MembershipListResponse })
+  @ApiStandardProblemResponses({ unauthorized: true, forbidden: true })
   async listMemberships(
     @Param() params: OrganizationIdParams,
     @Query() query: MembershipListQuery,
@@ -75,6 +93,12 @@ export class OrganizationsController {
   @Patch(':organizationId/memberships/:membershipId/role')
   @UseGuards(OrganizationPermissionGuard)
   @RequireOrganizationPermission('membership:manage')
+  @ApiOperation({ summary: 'Change an active non-owner membership role' })
+  @ApiOkResponse({
+    description: 'Updated organization membership',
+    type: OrganizationMembershipResponse,
+  })
+  @ApiStandardProblemResponses({ unauthorized: true, forbidden: true, notFound: true })
   async changeMembershipRole(
     @CurrentIdentity() identity: AccessTokenClaims,
     @Param() params: MembershipIdParams,
@@ -94,6 +118,9 @@ export class OrganizationsController {
   @UseGuards(OrganizationPermissionGuard)
   @RequireOrganizationPermission('membership:remove')
   @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiOperation({ summary: 'Remove an eligible active organization membership' })
+  @ApiNoContentResponse({ description: 'Membership removed' })
+  @ApiStandardProblemResponses({ unauthorized: true, forbidden: true, notFound: true })
   async removeMembership(
     @CurrentIdentity() identity: AccessTokenClaims,
     @Param() params: MembershipIdParams,

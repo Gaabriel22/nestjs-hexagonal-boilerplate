@@ -151,16 +151,16 @@
 - [x] 15.4 Integrate audit appends into registration/session security and organization administration transactions where specified
 - [x] 15.5 Add integration tests for atomic success/rollback, immutability, tenant ownership, and sensitive-data exclusion
 - [x] 15.6 Run `npm run format:check`, `npm run lint`, `npm run typecheck`, affected unit/integration tests, and `npm run build`
-- [ ] 15.7 Commit the verified slice with message `feat: record immutable audit events`
+- [x] 15.7 Commit the verified slice with message `feat: record immutable audit events`
 
 ## 16. Audit Retrieval
 
-- [ ] 16.1 Implement tenant-scoped cursor pagination and supported audit filters with deterministic ordering
-- [ ] 16.2 Enforce audit-read permission through application policy and HTTP guards
-- [ ] 16.3 Add the organization audit route and safe event response DTO
-- [ ] 16.4 Add unit and integration tests for pagination, filters, permission denial, and tenant isolation
-- [ ] 16.5 Add end-to-end tests for authorized retrieval and unauthorized concealment
-- [ ] 16.6 Run `npm run format:check`, `npm run lint`, `npm run typecheck`, affected tests, and `npm run build`
+- [x] 16.1 Implement tenant-scoped cursor pagination and supported audit filters with deterministic ordering
+- [x] 16.2 Enforce audit-read permission through application policy and HTTP guards
+- [x] 16.3 Add the organization audit route and safe event response DTO
+- [x] 16.4 Add unit and integration tests for pagination, filters, permission denial, and tenant isolation
+- [x] 16.5 Add end-to-end tests for authorized retrieval and unauthorized concealment
+- [x] 16.6 Run `npm run format:check`, `npm run lint`, `npm run typecheck`, affected tests, and `npm run build`
 - [ ] 16.7 Commit the verified slice with message `feat: add tenant audit queries`
 
 ## 17. OpenAPI and Scalar Reference

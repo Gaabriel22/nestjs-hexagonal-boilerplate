@@ -93,6 +93,7 @@ import { PrismaOrganizationRepository } from './infrastructure/persistence/prism
     MEMBERSHIP_REPOSITORY,
     ORGANIZATION_ACCESS_REPOSITORY,
     MEMBERSHIP_ADMINISTRATION_REPOSITORY,
+    OrganizationPermissionGuard,
   ],
 })
 export class OrganizationsModule {}

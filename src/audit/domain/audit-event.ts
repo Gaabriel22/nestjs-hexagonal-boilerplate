@@ -54,7 +54,7 @@ export interface AuditEventPrimitives {
   readonly occurredAt: Date
 }
 
-function allowSafeMetadata(
+export function allowSafeAuditMetadata(
   action: AuditAction,
   metadata: Readonly<Record<string, unknown>>,
 ): SafeAuditMetadata {
@@ -83,7 +83,7 @@ export class AuditEvent {
       targetType: input.targetType,
       targetId: input.targetId,
       requestIdentifier: input.requestIdentifier ?? null,
-      metadata: allowSafeMetadata(input.action, input.metadata ?? {}),
+      metadata: allowSafeAuditMetadata(input.action, input.metadata ?? {}),
       occurredAt: new Date(input.occurredAt),
     })
   }

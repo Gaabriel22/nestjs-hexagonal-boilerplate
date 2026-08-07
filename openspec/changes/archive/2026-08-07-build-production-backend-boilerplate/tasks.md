@@ -211,13 +211,13 @@
 - [x] 21.3 Build the production target from a clean context and inspect image user and copied artifacts
 - [x] 21.4 Start the production target against PostgreSQL and run API, authentication, readiness, and graceful-shutdown smoke tests
 - [x] 21.5 Run `npm run format:check`, `npm run lint`, `npm run typecheck`, all automated tests, `npm run build`, and the production container smoke test
-- [ ] 21.6 Commit the verified slice with message `chore: harden production container`
+- [x] 21.6 Commit the verified slice with message `chore: harden production container`
 
 ## 22. Final Quality Gate and Documentation
 
-- [ ] 22.1 Document architecture boundaries, feature anatomy, local setup, environment configuration, database workflows, tests, formatting, and API reference access
-- [ ] 22.2 Document extension recipes for a new module, use case, repository adapter, permission, audit action, and environment value
-- [ ] 22.3 Set representative coverage thresholds based on implemented modules and make the coverage command enforce them
-- [ ] 22.4 Run the complete workflow from a clean checkout, including dependency install, Prettier check, lint, typecheck, all test layers, migrations, build, and Compose smoke test
-- [ ] 22.5 Review generated OpenAPI output, container contents, logs, metrics labels, and repository files for leaked secrets or internal fields
-- [ ] 22.6 Commit the verified baseline with message `docs: finalize backend boilerplate`
+- [x] 22.1 Document architecture boundaries, feature anatomy, local setup, environment configuration, database workflows, tests, formatting, and API reference access
+- [x] 22.2 Document extension recipes for a new module, use case, repository adapter, permission, audit action, and environment value
+- [x] 22.3 Set representative coverage thresholds based on implemented modules and make the coverage command enforce them
+- [x] 22.4 Run the complete workflow from a clean checkout, including dependency install, Prettier check, lint, typecheck, all test layers, migrations, build, and Compose smoke test
+- [x] 22.5 Review generated OpenAPI output, container contents, logs, metrics labels, and repository files for leaked secrets or internal fields
+- [x] 22.6 Commit the verified baseline with message `docs: finalize backend boilerplate`

@@ -72,3 +72,22 @@ Remove containers and permanently delete the development database volume:
 ```powershell
 docker compose --env-file .env.docker down --volumes
 ```
+
+## Production image
+
+Build the hardened runtime target:
+
+```powershell
+docker build --target production --tag nestjs-hexagonal-boilerplate:production .
+```
+
+Copy `.env.production.example` to an ignored `.env.production` file and replace every placeholder.
+Inject that file only when the container starts:
+
+```powershell
+docker run --rm --init --read-only --tmpfs /tmp --env-file .env.production --publish 127.0.0.1:3000:3000 nestjs-hexagonal-boilerplate:production
+```
+
+The production image runs as the non-root `node` user. It contains compiled application files,
+production dependencies, and the package manifest only. Keep real secrets in the deployment
+platform secret manager or an ignored runtime environment file, never in the image build context.

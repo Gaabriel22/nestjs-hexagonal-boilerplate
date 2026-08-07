@@ -73,8 +73,12 @@ describe('structured logging and request correlation', () => {
           password: VALID_PASSWORD,
         },
       })
+      const registeredUser = response.json<{ readonly id: string }>()
       const auditEvent = await prisma.auditEvent.findFirstOrThrow({
-        where: { action: 'identity.user_registered' },
+        where: {
+          action: 'identity.user_registered',
+          targetId: registeredUser.id,
+        },
       })
       const completionLogs = logRecords(harness).filter(
         (record) => record.event === 'http.request.completed',

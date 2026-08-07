@@ -6,6 +6,7 @@ src/generated/
 .env.*
 !.env.example
 !.env.docker.example
+!.env.production.example
 *.log
 *.tsbuildinfo
 .idea/

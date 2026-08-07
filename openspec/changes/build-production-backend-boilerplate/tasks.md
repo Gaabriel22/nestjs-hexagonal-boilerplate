@@ -202,15 +202,15 @@
 - [x] 20.4 Add container-specific environment examples and document ordinary versus destructive shutdown commands
 - [x] 20.5 Build the development target and verify hot-start, PostgreSQL connectivity, liveness, and readiness
 - [x] 20.6 Run `npm run format:check`, relevant host checks, and `docker compose config`
-- [ ] 20.7 Commit the verified slice with message `chore: add containerized development environment`
+- [x] 20.7 Commit the verified slice with message `chore: add containerized development environment`
 
 ## 21. Production Container Hardening
 
-- [ ] 21.1 Run the production image as a dedicated non-root user with only runtime-required files
-- [ ] 21.2 Add container health check, termination behavior, and runtime-only secret configuration
-- [ ] 21.3 Build the production target from a clean context and inspect image user and copied artifacts
-- [ ] 21.4 Start the production target against PostgreSQL and run API, authentication, readiness, and graceful-shutdown smoke tests
-- [ ] 21.5 Run `npm run format:check`, `npm run lint`, `npm run typecheck`, all automated tests, `npm run build`, and the production container smoke test
+- [x] 21.1 Run the production image as a dedicated non-root user with only runtime-required files
+- [x] 21.2 Add container health check, termination behavior, and runtime-only secret configuration
+- [x] 21.3 Build the production target from a clean context and inspect image user and copied artifacts
+- [x] 21.4 Start the production target against PostgreSQL and run API, authentication, readiness, and graceful-shutdown smoke tests
+- [x] 21.5 Run `npm run format:check`, `npm run lint`, `npm run typecheck`, all automated tests, `npm run build`, and the production container smoke test
 - [ ] 21.6 Commit the verified slice with message `chore: harden production container`
 
 ## 22. Final Quality Gate and Documentation

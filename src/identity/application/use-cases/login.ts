@@ -1,6 +1,10 @@
 import { AuditEvent } from '../../../audit/domain/audit-event'
 import type { Clock } from '../../../shared/application/ports/clock'
 import type { IdentifierGenerator } from '../../../shared/application/ports/identifier-generator'
+import {
+  EMPTY_REQUEST_CONTEXT,
+  type RequestContext,
+} from '../../../shared/application/ports/request-context'
 import { IdentitySession } from '../../domain/entities/identity-session'
 import { NormalizedEmail } from '../../domain/value-objects/normalized-email'
 import { InvalidCredentialsError } from '../errors/invalid-credentials.error'
@@ -30,6 +34,7 @@ export class Login {
     private readonly refreshTokens: RefreshTokenService,
     private readonly identifiers: IdentifierGenerator,
     private readonly clock: Clock,
+    private readonly requestContext: RequestContext = EMPTY_REQUEST_CONTEXT,
   ) {}
 
   async execute(command: LoginCommand): Promise<LoginResult> {
@@ -66,6 +71,7 @@ export class Login {
         targetType: 'session',
         targetId: session.id,
         occurredAt: currentTime,
+        requestIdentifier: this.requestContext.getRequestIdentifier(),
       }),
     )
 

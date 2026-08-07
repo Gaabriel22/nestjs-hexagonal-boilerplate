@@ -47,7 +47,7 @@ describe('ChangeOrganizationMembershipRole', () => {
           membershipId: MEMBERSHIP_ID,
           role: 'admin',
           currentTime: NOW,
-          audit: { eventId: AUDIT_EVENT_ID },
+          audit: { eventId: AUDIT_EVENT_ID, requestIdentifier: null },
         },
       ],
     ])
@@ -101,7 +101,7 @@ describe('RemoveOrganizationMembership', () => {
           actorUserId: USER_ID,
           membershipId: MEMBERSHIP_ID,
           currentTime: NOW,
-          audit: { eventId: AUDIT_EVENT_ID },
+          audit: { eventId: AUDIT_EVENT_ID, requestIdentifier: null },
         },
       ],
     ])

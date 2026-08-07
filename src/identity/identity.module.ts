@@ -6,8 +6,10 @@ import {
   IDENTIFIER_GENERATOR,
   type IdentifierGenerator,
 } from '../shared/application/ports/identifier-generator'
+import { REQUEST_CONTEXT, type RequestContext } from '../shared/application/ports/request-context'
 import { CryptoIdentifierGenerator } from '../shared/infrastructure/system/crypto-identifier-generator'
 import { SystemClock } from '../shared/infrastructure/system/system-clock'
+import { RequestContextModule } from '../shared/infrastructure/observability/request-context.module'
 import { PASSWORD_HASHER, type PasswordHasher } from './application/ports/password-hasher'
 import {
   ACCESS_TOKEN_SERVICE,
@@ -57,7 +59,7 @@ import { HmacRefreshTokenService } from './infrastructure/security/hmac-refresh-
 import { JwtAccessTokenService } from './infrastructure/security/jwt-access-token.service'
 
 @Module({
-  imports: [JwtModule.register({})],
+  imports: [JwtModule.register({}), RequestContextModule],
   controllers: [IdentityController],
   providers: [
     PrismaUserRepository,
@@ -123,14 +125,27 @@ import { JwtAccessTokenService } from './infrastructure/security/jwt-access-toke
     },
     {
       provide: RegisterUser,
-      inject: [PASSWORD_HASHER, REGISTRATION_REPOSITORY, IDENTIFIER_GENERATOR, CLOCK],
+      inject: [
+        PASSWORD_HASHER,
+        REGISTRATION_REPOSITORY,
+        IDENTIFIER_GENERATOR,
+        CLOCK,
+        REQUEST_CONTEXT,
+      ],
       useFactory: (
         passwordHasher: PasswordHasher,
         registrationRepository: RegistrationRepository,
         identifierGenerator: IdentifierGenerator,
         clock: Clock,
+        requestContext: RequestContext,
       ): RegisterUser =>
-        new RegisterUser(passwordHasher, registrationRepository, identifierGenerator, clock),
+        new RegisterUser(
+          passwordHasher,
+          registrationRepository,
+          identifierGenerator,
+          clock,
+          requestContext,
+        ),
     },
     {
       provide: Login,
@@ -141,6 +156,7 @@ import { JwtAccessTokenService } from './infrastructure/security/jwt-access-toke
         REFRESH_TOKEN_SERVICE,
         IDENTIFIER_GENERATOR,
         CLOCK,
+        REQUEST_CONTEXT,
       ],
       useFactory: (
         repository: AuthenticationRepository,
@@ -149,6 +165,7 @@ import { JwtAccessTokenService } from './infrastructure/security/jwt-access-toke
         refreshTokens: RefreshTokenService,
         identifiers: IdentifierGenerator,
         clock: Clock,
+        requestContext: RequestContext,
       ): Login =>
         new Login(
           repository,
@@ -157,6 +174,7 @@ import { JwtAccessTokenService } from './infrastructure/security/jwt-access-toke
           refreshTokens,
           identifiers,
           clock,
+          requestContext,
         ),
     },
     {
@@ -176,6 +194,7 @@ import { JwtAccessTokenService } from './infrastructure/security/jwt-access-toke
         REFRESH_TOKEN_SERVICE,
         CLOCK,
         IDENTIFIER_GENERATOR,
+        REQUEST_CONTEXT,
       ],
       useFactory: (
         repository: SessionManagementRepository,
@@ -183,17 +202,27 @@ import { JwtAccessTokenService } from './infrastructure/security/jwt-access-toke
         refreshTokens: RefreshTokenService,
         clock: Clock,
         identifiers: IdentifierGenerator,
+        requestContext: RequestContext,
       ): RefreshSession =>
-        new RefreshSession(repository, accessTokens, refreshTokens, clock, identifiers),
+        new RefreshSession(
+          repository,
+          accessTokens,
+          refreshTokens,
+          clock,
+          identifiers,
+          requestContext,
+        ),
     },
     {
       provide: LogoutCurrentSession,
-      inject: [SESSION_MANAGEMENT_REPOSITORY, CLOCK, IDENTIFIER_GENERATOR],
+      inject: [SESSION_MANAGEMENT_REPOSITORY, CLOCK, IDENTIFIER_GENERATOR, REQUEST_CONTEXT],
       useFactory: (
         repository: SessionManagementRepository,
         clock: Clock,
         identifiers: IdentifierGenerator,
-      ): LogoutCurrentSession => new LogoutCurrentSession(repository, clock, identifiers),
+        requestContext: RequestContext,
+      ): LogoutCurrentSession =>
+        new LogoutCurrentSession(repository, clock, identifiers, requestContext),
     },
     {
       provide: ListActiveSessions,
@@ -203,12 +232,14 @@ import { JwtAccessTokenService } from './infrastructure/security/jwt-access-toke
     },
     {
       provide: RevokeOwnedSession,
-      inject: [SESSION_MANAGEMENT_REPOSITORY, CLOCK, IDENTIFIER_GENERATOR],
+      inject: [SESSION_MANAGEMENT_REPOSITORY, CLOCK, IDENTIFIER_GENERATOR, REQUEST_CONTEXT],
       useFactory: (
         repository: SessionManagementRepository,
         clock: Clock,
         identifiers: IdentifierGenerator,
-      ): RevokeOwnedSession => new RevokeOwnedSession(repository, clock, identifiers),
+        requestContext: RequestContext,
+      ): RevokeOwnedSession =>
+        new RevokeOwnedSession(repository, clock, identifiers, requestContext),
     },
   ],
   exports: [

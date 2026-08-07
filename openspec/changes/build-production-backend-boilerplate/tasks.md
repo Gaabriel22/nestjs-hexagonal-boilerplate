@@ -171,17 +171,17 @@
 - [x] 17.4 Add an OpenAPI generation test that validates required operations, schemas, and security declarations
 - [x] 17.5 Add an end-to-end smoke test for the raw document and Scalar reference routes
 - [x] 17.6 Run `npm run format:check`, `npm run lint`, `npm run typecheck`, OpenAPI tests, end-to-end tests, and `npm run build`
-- [ ] 17.7 Commit the verified slice with message `docs: add OpenAPI and Scalar reference`
+- [x] 17.7 Commit the verified slice with message `docs: add OpenAPI and Scalar reference`
 
 ## 18. Structured Logging and Correlation
 
-- [ ] 18.1 Add JSON logger configuration with service, environment, severity, timestamp, and error serialization
-- [ ] 18.2 Configure redaction for authorization, cookies, credentials, tokens, and secret fields
-- [ ] 18.3 Implement validated inbound or generated request identifiers and return them in response headers
-- [ ] 18.4 Add one request completion log with method, route template, status, duration, and request identifier
-- [ ] 18.5 Propagate request identifiers to audited application actions without coupling domain code to HTTP
-- [ ] 18.6 Add unit and end-to-end tests for correlation, bounded request logs, redaction, and error serialization
-- [ ] 18.7 Run `npm run format:check`, `npm run lint`, `npm run typecheck`, affected tests, and `npm run build`
+- [x] 18.1 Add JSON logger configuration with service, environment, severity, timestamp, and error serialization
+- [x] 18.2 Configure redaction for authorization, cookies, credentials, tokens, and secret fields
+- [x] 18.3 Implement validated inbound or generated request identifiers and return them in response headers
+- [x] 18.4 Add one request completion log with method, route template, status, duration, and request identifier
+- [x] 18.5 Propagate request identifiers to audited application actions without coupling domain code to HTTP
+- [x] 18.6 Add unit and end-to-end tests for correlation, bounded request logs, redaction, and error serialization
+- [x] 18.7 Run `npm run format:check`, `npm run lint`, `npm run typecheck`, affected tests, and `npm run build`
 - [ ] 18.8 Commit the verified slice with message `feat: add structured correlated logging`
 
 ## 19. Health and Metrics

@@ -1,6 +1,10 @@
 import { AuditEvent } from '../../../audit/domain/audit-event'
 import type { Clock } from '../../../shared/application/ports/clock'
 import type { IdentifierGenerator } from '../../../shared/application/ports/identifier-generator'
+import {
+  EMPTY_REQUEST_CONTEXT,
+  type RequestContext,
+} from '../../../shared/application/ports/request-context'
 import { Credential } from '../../domain/entities/credential'
 import { IdentityUser } from '../../domain/entities/identity-user'
 import { PasswordPolicy } from '../../domain/services/password-policy'
@@ -26,6 +30,7 @@ export class RegisterUser {
     private readonly registrationRepository: RegistrationRepository,
     private readonly identifierGenerator: IdentifierGenerator,
     private readonly clock: Clock,
+    private readonly requestContext: RequestContext = EMPTY_REQUEST_CONTEXT,
   ) {}
 
   async execute(command: RegisterUserCommand): Promise<RegisteredUserResult> {
@@ -53,6 +58,7 @@ export class RegisterUser {
         targetType: 'user',
         targetId: user.id,
         occurredAt: currentTime,
+        requestIdentifier: this.requestContext.getRequestIdentifier(),
       }),
     )
 

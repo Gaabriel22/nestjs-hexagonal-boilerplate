@@ -5,10 +5,12 @@ import { HttpException, HttpStatus } from '@nestjs/common'
 import type { NestFastifyApplication } from '@nestjs/platform-fastify'
 
 import type { ApplicationConfig } from '../config/environment.schema'
+import type { AsyncLocalRequestContext } from '../observability/async-local-request-context'
 
 export async function configureHttpPlatform(
   application: NestFastifyApplication,
   config: ApplicationConfig,
+  requestContext: AsyncLocalRequestContext,
 ): Promise<void> {
   await application.register(cors, {
     credentials: true,
@@ -27,5 +29,26 @@ export async function configureHttpPlatform(
         },
         HttpStatus.TOO_MANY_REQUESTS,
       ),
+  })
+
+  const fastify = application.getHttpAdapter().getInstance()
+
+  fastify.addHook('onRequest', (request, reply, done) => {
+    reply.header('x-request-id', request.id)
+    requestContext.run(request.id, done)
+  })
+  fastify.addHook('onResponse', (request, reply, done) => {
+    request.log.info(
+      {
+        event: 'http.request.completed',
+        requestId: request.id,
+        method: request.method,
+        route: request.routeOptions.url,
+        status: reply.statusCode,
+        durationMs: reply.elapsedTime,
+      },
+      'Request completed',
+    )
+    done()
   })
 }

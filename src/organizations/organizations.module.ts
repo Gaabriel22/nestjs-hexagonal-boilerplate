@@ -6,8 +6,10 @@ import {
   IDENTIFIER_GENERATOR,
   type IdentifierGenerator,
 } from '../shared/application/ports/identifier-generator'
+import { REQUEST_CONTEXT, type RequestContext } from '../shared/application/ports/request-context'
 import { CryptoIdentifierGenerator } from '../shared/infrastructure/system/crypto-identifier-generator'
 import { SystemClock } from '../shared/infrastructure/system/system-clock'
+import { RequestContextModule } from '../shared/infrastructure/observability/request-context.module'
 import {
   MEMBERSHIP_ADMINISTRATION_REPOSITORY,
   type MembershipAdministrationRepository,
@@ -33,7 +35,7 @@ import { PrismaOrganizationCreationRepository } from './infrastructure/persisten
 import { PrismaOrganizationRepository } from './infrastructure/persistence/prisma/repositories/prisma-organization.repository'
 
 @Module({
-  imports: [IdentityModule],
+  imports: [IdentityModule, RequestContextModule],
   controllers: [OrganizationsController],
   providers: [
     PrismaOrganizationRepository,
@@ -54,12 +56,14 @@ import { PrismaOrganizationRepository } from './infrastructure/persistence/prism
     { provide: CLOCK, useExisting: SystemClock },
     {
       provide: CreateOrganization,
-      inject: [ORGANIZATION_CREATION_REPOSITORY, IDENTIFIER_GENERATOR, CLOCK],
+      inject: [ORGANIZATION_CREATION_REPOSITORY, IDENTIFIER_GENERATOR, CLOCK, REQUEST_CONTEXT],
       useFactory: (
         repository: OrganizationCreationRepository,
         identifiers: IdentifierGenerator,
         clock: Clock,
-      ): CreateOrganization => new CreateOrganization(repository, identifiers, clock),
+        requestContext: RequestContext,
+      ): CreateOrganization =>
+        new CreateOrganization(repository, identifiers, clock, requestContext),
     },
     {
       provide: ListOrganizationMemberships,
@@ -69,23 +73,25 @@ import { PrismaOrganizationRepository } from './infrastructure/persistence/prism
     },
     {
       provide: ChangeOrganizationMembershipRole,
-      inject: [MEMBERSHIP_ADMINISTRATION_REPOSITORY, CLOCK, IDENTIFIER_GENERATOR],
+      inject: [MEMBERSHIP_ADMINISTRATION_REPOSITORY, CLOCK, IDENTIFIER_GENERATOR, REQUEST_CONTEXT],
       useFactory: (
         repository: MembershipAdministrationRepository,
         clock: Clock,
         identifiers: IdentifierGenerator,
+        requestContext: RequestContext,
       ): ChangeOrganizationMembershipRole =>
-        new ChangeOrganizationMembershipRole(repository, clock, identifiers),
+        new ChangeOrganizationMembershipRole(repository, clock, identifiers, requestContext),
     },
     {
       provide: RemoveOrganizationMembership,
-      inject: [MEMBERSHIP_ADMINISTRATION_REPOSITORY, CLOCK, IDENTIFIER_GENERATOR],
+      inject: [MEMBERSHIP_ADMINISTRATION_REPOSITORY, CLOCK, IDENTIFIER_GENERATOR, REQUEST_CONTEXT],
       useFactory: (
         repository: MembershipAdministrationRepository,
         clock: Clock,
         identifiers: IdentifierGenerator,
+        requestContext: RequestContext,
       ): RemoveOrganizationMembership =>
-        new RemoveOrganizationMembership(repository, clock, identifiers),
+        new RemoveOrganizationMembership(repository, clock, identifiers, requestContext),
     },
   ],
   exports: [

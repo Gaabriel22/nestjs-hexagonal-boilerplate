@@ -1,5 +1,9 @@
 import type { Clock } from '../../../shared/application/ports/clock'
 import type { IdentifierGenerator } from '../../../shared/application/ports/identifier-generator'
+import {
+  EMPTY_REQUEST_CONTEXT,
+  type RequestContext,
+} from '../../../shared/application/ports/request-context'
 import { LastOwnerRequiredError } from '../errors/last-owner-required.error'
 import { OrganizationAccessDeniedError } from '../errors/organization-access-denied.error'
 import { OrganizationMembershipNotFoundError } from '../errors/organization-membership-not-found.error'
@@ -16,13 +20,17 @@ export class RemoveOrganizationMembership {
     private readonly repository: MembershipAdministrationRepository,
     private readonly clock: Clock,
     private readonly identifiers: IdentifierGenerator,
+    private readonly requestContext: RequestContext = EMPTY_REQUEST_CONTEXT,
   ) {}
 
   async execute(input: RemoveOrganizationMembershipInput): Promise<void> {
     const result = await this.repository.remove({
       ...input,
       currentTime: this.clock.now(),
-      audit: { eventId: this.identifiers.generate() },
+      audit: {
+        eventId: this.identifiers.generate(),
+        requestIdentifier: this.requestContext.getRequestIdentifier(),
+      },
     })
 
     switch (result.outcome) {

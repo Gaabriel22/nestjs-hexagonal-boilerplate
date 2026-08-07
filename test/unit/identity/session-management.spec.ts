@@ -65,7 +65,7 @@ describe('RefreshSession', () => {
           replacementTokenHash: 'new-refresh-hash',
           replacementExpiresAt: EXPIRES_AT,
           currentTime: NOW,
-          audit: { eventId: AUDIT_EVENT_ID },
+          audit: { eventId: AUDIT_EVENT_ID, requestIdentifier: null },
         },
       ],
     ])
@@ -108,7 +108,7 @@ describe('Session management use cases', () => {
           sessionId: SESSION_ID,
           currentTime: NOW,
           reason: 'logout',
-          audit: { eventId: AUDIT_EVENT_ID },
+          audit: { eventId: AUDIT_EVENT_ID, requestIdentifier: null },
         },
       ],
       [
@@ -117,7 +117,7 @@ describe('Session management use cases', () => {
           sessionId: OTHER_SESSION_ID,
           currentTime: NOW,
           reason: 'user_revocation',
-          audit: { eventId: AUDIT_EVENT_ID },
+          audit: { eventId: AUDIT_EVENT_ID, requestIdentifier: null },
         },
       ],
     ])

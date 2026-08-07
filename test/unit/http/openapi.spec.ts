@@ -19,7 +19,9 @@ describe('OpenAPI document', () => {
     const bootstrap = await import('../../../src/bootstrap')
     documentation =
       await import('../../../src/shared/infrastructure/http/configure-api-documentation')
-    application = await bootstrap.createApplication()
+    application = await bootstrap.createApplication(undefined, undefined, {
+      loggerDestination: { write: (): void => undefined },
+    })
     document = documentation.createOpenApiDocument(application)
   })
 

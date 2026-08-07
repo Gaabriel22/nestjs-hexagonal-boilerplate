@@ -1,5 +1,9 @@
 import type { Clock } from '../../../shared/application/ports/clock'
 import type { IdentifierGenerator } from '../../../shared/application/ports/identifier-generator'
+import {
+  EMPTY_REQUEST_CONTEXT,
+  type RequestContext,
+} from '../../../shared/application/ports/request-context'
 import { InvalidRefreshTokenError } from '../errors/invalid-refresh-token.error'
 import type { AccessTokenService } from '../ports/access-token.service'
 import type { RefreshTokenService } from '../ports/refresh-token.service'
@@ -19,6 +23,7 @@ export class RefreshSession {
     private readonly refreshTokens: RefreshTokenService,
     private readonly clock: Clock,
     private readonly identifiers: IdentifierGenerator,
+    private readonly requestContext: RequestContext = EMPTY_REQUEST_CONTEXT,
   ) {}
 
   async execute(refreshToken: string): Promise<RefreshSessionResult> {
@@ -29,7 +34,10 @@ export class RefreshSession {
       replacementTokenHash: replacement.tokenHash,
       replacementExpiresAt: replacement.expiresAt,
       currentTime,
-      audit: { eventId: this.identifiers.generate() },
+      audit: {
+        eventId: this.identifiers.generate(),
+        requestIdentifier: this.requestContext.getRequestIdentifier(),
+      },
     })
 
     if (rotation.outcome !== 'rotated') {

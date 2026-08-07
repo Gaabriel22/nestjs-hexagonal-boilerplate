@@ -1,5 +1,9 @@
 import type { Clock } from '../../../shared/application/ports/clock'
 import type { IdentifierGenerator } from '../../../shared/application/ports/identifier-generator'
+import {
+  EMPTY_REQUEST_CONTEXT,
+  type RequestContext,
+} from '../../../shared/application/ports/request-context'
 import { OrganizationAccessDeniedError } from '../errors/organization-access-denied.error'
 import { OrganizationMembershipNotFoundError } from '../errors/organization-membership-not-found.error'
 import { OwnerMembershipProtectedError } from '../errors/owner-membership-protected.error'
@@ -21,6 +25,7 @@ export class ChangeOrganizationMembershipRole {
     private readonly repository: MembershipAdministrationRepository,
     private readonly clock: Clock,
     private readonly identifiers: IdentifierGenerator,
+    private readonly requestContext: RequestContext = EMPTY_REQUEST_CONTEXT,
   ) {}
 
   async execute(
@@ -29,7 +34,10 @@ export class ChangeOrganizationMembershipRole {
     const result = await this.repository.changeRole({
       ...input,
       currentTime: this.clock.now(),
-      audit: { eventId: this.identifiers.generate() },
+      audit: {
+        eventId: this.identifiers.generate(),
+        requestIdentifier: this.requestContext.getRequestIdentifier(),
+      },
     })
 
     switch (result.outcome) {

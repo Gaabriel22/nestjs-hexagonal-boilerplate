@@ -1,5 +1,9 @@
 import type { Clock } from '../../../shared/application/ports/clock'
 import type { IdentifierGenerator } from '../../../shared/application/ports/identifier-generator'
+import {
+  EMPTY_REQUEST_CONTEXT,
+  type RequestContext,
+} from '../../../shared/application/ports/request-context'
 import type { SessionManagementRepository } from '../ports/session-management.repository'
 
 export class RevokeOwnedSession {
@@ -7,6 +11,7 @@ export class RevokeOwnedSession {
     private readonly repository: SessionManagementRepository,
     private readonly clock: Clock,
     private readonly identifiers: IdentifierGenerator,
+    private readonly requestContext: RequestContext = EMPTY_REQUEST_CONTEXT,
   ) {}
 
   async execute(userId: string, sessionId: string): Promise<void> {
@@ -15,7 +20,10 @@ export class RevokeOwnedSession {
       sessionId,
       currentTime: this.clock.now(),
       reason: 'user_revocation',
-      audit: { eventId: this.identifiers.generate() },
+      audit: {
+        eventId: this.identifiers.generate(),
+        requestIdentifier: this.requestContext.getRequestIdentifier(),
+      },
     })
   }
 }

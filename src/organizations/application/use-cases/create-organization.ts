@@ -1,6 +1,10 @@
 import { AuditEvent } from '../../../audit/domain/audit-event'
 import type { Clock } from '../../../shared/application/ports/clock'
 import type { IdentifierGenerator } from '../../../shared/application/ports/identifier-generator'
+import {
+  EMPTY_REQUEST_CONTEXT,
+  type RequestContext,
+} from '../../../shared/application/ports/request-context'
 import { Organization } from '../../domain/entities/organization'
 import { OrganizationMembership } from '../../domain/entities/organization-membership'
 import type { OrganizationCreationRepository } from '../ports/organization-creation.repository'
@@ -32,6 +36,7 @@ export class CreateOrganization {
     private readonly repository: OrganizationCreationRepository,
     private readonly identifiers: IdentifierGenerator,
     private readonly clock: Clock,
+    private readonly requestContext: RequestContext = EMPTY_REQUEST_CONTEXT,
   ) {}
 
   async execute(command: CreateOrganizationCommand): Promise<CreateOrganizationResult> {
@@ -59,6 +64,7 @@ export class CreateOrganization {
         targetType: 'organization',
         targetId: organization.id,
         occurredAt: currentTime,
+        requestIdentifier: this.requestContext.getRequestIdentifier(),
       }),
     )
 

@@ -47,3 +47,28 @@ Required values:
 
 The committed example contains development-only placeholders. Replace every secret outside local
 development.
+
+## Docker development
+
+Copy the container environment example, then start the API and PostgreSQL:
+
+```powershell
+Copy-Item .env.docker.example .env.docker
+docker compose --env-file .env.docker up --build
+```
+
+The API is available at `http://localhost:3000`, Scalar at
+`http://localhost:3000/reference`, and PostgreSQL at `localhost:5432`. Source changes restart the
+Nest development server. Database migrations run before the API starts.
+
+Stop containers while preserving PostgreSQL data:
+
+```powershell
+docker compose --env-file .env.docker down
+```
+
+Remove containers and permanently delete the development database volume:
+
+```powershell
+docker compose --env-file .env.docker down --volumes
+```

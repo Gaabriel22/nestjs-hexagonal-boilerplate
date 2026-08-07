@@ -192,16 +192,16 @@
 - [x] 19.4 Ensure metrics use route templates and exclude user, tenant, token, and request identifiers from labels
 - [x] 19.5 Add unit and end-to-end tests for live, ready, not-ready, metric format, and label cardinality safeguards
 - [x] 19.6 Run `npm run format:check`, `npm run lint`, `npm run typecheck`, affected tests, and `npm run build`
-- [ ] 19.7 Commit the verified slice with message `feat: add health checks and metrics`
+- [x] 19.7 Commit the verified slice with message `feat: add health checks and metrics`
 
 ## 20. Development Containers
 
-- [ ] 20.1 Add a pinned multi-stage Dockerfile with dependency, development, build, and production targets
-- [ ] 20.2 Add `.dockerignore` rules for local dependencies, environment files, logs, coverage, builds, generated clutter, and version-control internals
-- [ ] 20.3 Add Docker Compose API and PostgreSQL services with health-aware startup, named development storage, and localhost development ports
-- [ ] 20.4 Add container-specific environment examples and document ordinary versus destructive shutdown commands
-- [ ] 20.5 Build the development target and verify hot-start, PostgreSQL connectivity, liveness, and readiness
-- [ ] 20.6 Run `npm run format:check`, relevant host checks, and `docker compose config`
+- [x] 20.1 Add a pinned multi-stage Dockerfile with dependency, development, build, and production targets
+- [x] 20.2 Add `.dockerignore` rules for local dependencies, environment files, logs, coverage, builds, generated clutter, and version-control internals
+- [x] 20.3 Add Docker Compose API and PostgreSQL services with health-aware startup, named development storage, and localhost development ports
+- [x] 20.4 Add container-specific environment examples and document ordinary versus destructive shutdown commands
+- [x] 20.5 Build the development target and verify hot-start, PostgreSQL connectivity, liveness, and readiness
+- [x] 20.6 Run `npm run format:check`, relevant host checks, and `docker compose config`
 - [ ] 20.7 Commit the verified slice with message `chore: add containerized development environment`
 
 ## 21. Production Container Hardening

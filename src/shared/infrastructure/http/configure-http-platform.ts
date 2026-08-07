@@ -7,10 +7,20 @@ import type { NestFastifyApplication } from '@nestjs/platform-fastify'
 import type { ApplicationConfig } from '../config/environment.schema'
 import type { AsyncLocalRequestContext } from '../observability/async-local-request-context'
 
+export interface HttpMetricsRecorder {
+  recordHttpRequest(metric: {
+    readonly method: string
+    readonly route: string
+    readonly statusCode: number
+    readonly durationMilliseconds: number
+  }): void
+}
+
 export async function configureHttpPlatform(
   application: NestFastifyApplication,
   config: ApplicationConfig,
   requestContext: AsyncLocalRequestContext,
+  metrics?: HttpMetricsRecorder,
 ): Promise<void> {
   await application.register(cors, {
     credentials: true,
@@ -38,12 +48,20 @@ export async function configureHttpPlatform(
     requestContext.run(request.id, done)
   })
   fastify.addHook('onResponse', (request, reply, done) => {
+    const route = request.routeOptions.url ?? 'unmatched'
+
+    metrics?.recordHttpRequest({
+      method: request.method,
+      route,
+      statusCode: reply.statusCode,
+      durationMilliseconds: reply.elapsedTime,
+    })
     request.log.info(
       {
         event: 'http.request.completed',
         requestId: request.id,
         method: request.method,
-        route: request.routeOptions.url,
+        route,
         status: reply.statusCode,
         durationMs: reply.elapsedTime,
       },

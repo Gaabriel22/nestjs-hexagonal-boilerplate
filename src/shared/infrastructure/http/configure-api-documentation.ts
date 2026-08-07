@@ -43,6 +43,7 @@ export function createOpenApiDocument(application: NestFastifyApplication): Open
     .addTag('Users', 'Current user profile operations')
     .addTag('Organizations', 'Organization and membership administration')
     .addTag('Audit', 'Tenant-scoped audit event retrieval')
+    .addTag('Operations', 'Liveness, readiness and Prometheus metrics')
     .build()
 
   return SwaggerModule.createDocument(application, configuration, {

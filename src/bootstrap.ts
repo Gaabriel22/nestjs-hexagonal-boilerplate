@@ -7,6 +7,7 @@ import type { Http2ServerRequest } from 'node:http2'
 import type { DestinationStream } from 'pino'
 
 import { AppModule } from './app.module'
+import { MetricsService } from './operations/infrastructure/metrics/metrics.service'
 import { applicationConfig } from './shared/infrastructure/config/application-config'
 import type { ApplicationConfig } from './shared/infrastructure/config/environment.schema'
 import { configureApiDocumentation } from './shared/infrastructure/http/configure-api-documentation'
@@ -65,7 +66,12 @@ export async function createApplication(
     }),
   )
   application.useGlobalFilters(new ProblemDetailsFilter())
-  await configureHttpPlatform(application, config, requestContextStorage)
+  await configureHttpPlatform(
+    application,
+    config,
+    requestContextStorage,
+    rootModule === AppModule ? application.get(MetricsService) : undefined,
+  )
   await configureApiDocumentation(application, config)
 
   return application

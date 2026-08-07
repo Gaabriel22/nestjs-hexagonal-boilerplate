@@ -40,6 +40,7 @@ describe('OpenAPI document', () => {
       'Users',
       'Organizations',
       'Audit',
+      'Operations',
     ])
     expect(
       document.components?.securitySchemes?.[documentation.OPENAPI_BEARER_SCHEME],
@@ -47,6 +48,18 @@ describe('OpenAPI document', () => {
       type: 'http',
       scheme: 'bearer',
       bearerFormat: 'JWT',
+    })
+  })
+
+  it('documents version-neutral operational endpoints', () => {
+    expect(operation('/api/health/live', 'get').responses['200']).toBeDefined()
+    expect(operation('/api/health/ready', 'get').responses['503']).toBeDefined()
+    expect(operation('/api/metrics', 'get').responses['200']).toMatchObject({
+      content: {
+        'text/plain': {
+          schema: { type: 'string' },
+        },
+      },
     })
   })
 

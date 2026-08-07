@@ -182,16 +182,16 @@
 - [x] 18.5 Propagate request identifiers to audited application actions without coupling domain code to HTTP
 - [x] 18.6 Add unit and end-to-end tests for correlation, bounded request logs, redaction, and error serialization
 - [x] 18.7 Run `npm run format:check`, `npm run lint`, `npm run typecheck`, affected tests, and `npm run build`
-- [ ] 18.8 Commit the verified slice with message `feat: add structured correlated logging`
+- [x] 18.8 Commit the verified slice with message `feat: add structured correlated logging`
 
 ## 19. Health and Metrics
 
-- [ ] 19.1 Add a lightweight liveness endpoint independent of optional external dependencies
-- [ ] 19.2 Add a bounded-time readiness endpoint that verifies PostgreSQL and returns HTTP 503 when unavailable
-- [ ] 19.3 Add Prometheus-compatible process, request count, and request duration metrics
-- [ ] 19.4 Ensure metrics use route templates and exclude user, tenant, token, and request identifiers from labels
-- [ ] 19.5 Add unit and end-to-end tests for live, ready, not-ready, metric format, and label cardinality safeguards
-- [ ] 19.6 Run `npm run format:check`, `npm run lint`, `npm run typecheck`, affected tests, and `npm run build`
+- [x] 19.1 Add a lightweight liveness endpoint independent of optional external dependencies
+- [x] 19.2 Add a bounded-time readiness endpoint that verifies PostgreSQL and returns HTTP 503 when unavailable
+- [x] 19.3 Add Prometheus-compatible process, request count, and request duration metrics
+- [x] 19.4 Ensure metrics use route templates and exclude user, tenant, token, and request identifiers from labels
+- [x] 19.5 Add unit and end-to-end tests for live, ready, not-ready, metric format, and label cardinality safeguards
+- [x] 19.6 Run `npm run format:check`, `npm run lint`, `npm run typecheck`, affected tests, and `npm run build`
 - [ ] 19.7 Commit the verified slice with message `feat: add health checks and metrics`
 
 ## 20. Development Containers
